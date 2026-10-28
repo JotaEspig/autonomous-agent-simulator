@@ -1,5 +1,5 @@
 -- End of the day for each person:
---   a full day of bread (maxBreadsPerDay) resets hunger to 0; otherwise hunger grows by
+--   a full ration (3 breads, 4 during an epidemic) resets hunger to 0; otherwise hunger grows by
 --   hungerPerDay and falls by 1 per bread eaten;
 --   starvationDays in a row without any bread kill (plots go back to the island);
 --   80% of what is left of today's income is spent elsewhere, 20% is saved;
@@ -27,7 +27,7 @@ function run(self, world)
   end
 
   local hunger = 0
-  if self.ateToday < ctx.maxBreadsPerDay then
+  if self.ateToday < ctx.ration then
     hunger = math.max(0, self.hunger + ctx.hungerPerDay - self.ateToday)
   end
   local effects = {
@@ -56,6 +56,7 @@ function run(self, world)
     effects[#effects + 1] = fx.spawn("islander", {
       riskTolerance = world:rand(),
       ambition = world:rand(),
+      frugality = world:rand(),
     })
     effects[#effects + 1] = fx.add("ctx.births", 1)
   end

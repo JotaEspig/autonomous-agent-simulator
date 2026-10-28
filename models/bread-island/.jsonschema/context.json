@@ -37,12 +37,20 @@
       "description": "Today's bread offers: units for sale, by agent id",
       "type": "object"
     },
-    "breadBids": {
+    "breadBidMax": {
       "additionalProperties": {
-        "description": "Today's bread bids, one per unit, keyed \u003cagent id\u003e.\u003cunit\u003e (1 = the day's first bread)",
+        "description": "Most the buyer accepts to pay for that unit if the cheaper bread is gone; same keys as breadBids",
         "type": "number"
       },
-      "description": "Today's bread bids, one per unit, keyed \u003cagent id\u003e.\u003cunit\u003e (1 = the day's first bread)",
+      "description": "Most the buyer accepts to pay for that unit if the cheaper bread is gone; same keys as breadBids",
+      "type": "object"
+    },
+    "breadBids": {
+      "additionalProperties": {
+        "description": "Today's bread bids, one per unit, keyed \u003cagent id\u003e.\u003cunit\u003e (1 = the day's first bread): the price the buyer offers",
+        "type": "number"
+      },
+      "description": "Today's bread bids, one per unit, keyed \u003cagent id\u003e.\u003cunit\u003e (1 = the day's first bread): the price the buyer offers",
       "type": "object"
     },
     "breadSold": {
@@ -63,6 +71,57 @@
     },
     "description": {
       "type": "string"
+    },
+    "droughtChance": {
+      "description": "Daily chance that a drought starts (when the weather is normal)",
+      "type": "number"
+    },
+    "droughtDaysLeft": {
+      "description": "Days left of the current drought",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "droughtDuration": {
+      "description": "Days a drought lasts",
+      "type": "integer"
+    },
+    "droughtImpact": {
+      "description": "Share of the harvest lost during a drought",
+      "type": "number"
+    },
+    "epidemicChance": {
+      "description": "Daily chance that an epidemic starts",
+      "type": "number"
+    },
+    "epidemicDaysLeft": {
+      "description": "Days left of the current epidemic",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "epidemicDuration": {
+      "description": "Days an epidemic lasts",
+      "type": "integer"
+    },
+    "epidemicRation": {
+      "description": "Breads needed to reset hunger during an epidemic",
+      "type": "integer"
+    },
+    "goldenChance": {
+      "description": "Daily chance that a golden age starts (when the weather is normal)",
+      "type": "number"
+    },
+    "goldenDaysLeft": {
+      "description": "Days left of the current golden age",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "goldenDuration": {
+      "description": "Days a golden age lasts",
+      "type": "integer"
+    },
+    "goldenImpact": {
+      "description": "Extra share of harvest during a golden age",
+      "type": "number"
     },
     "hungerPerDay": {
       "description": "Hunger added on a day without a full ration; each bread eaten removes 1",
@@ -118,7 +177,7 @@
       "type": "number"
     },
     "maxBreadsPerDay": {
-      "description": "Most bread a person eats in a day; eating this many resets hunger to 0",
+      "description": "Normal daily ration: eating this many breads resets hunger to 0",
       "type": "integer"
     },
     "minPrice": {
@@ -138,6 +197,14 @@
       "maximum": 1,
       "minimum": 0,
       "type": "number"
+    },
+    "productionFactor": {
+      "description": "Today's harvest multiplier: lower in a drought, higher in a golden age",
+      "type": "number"
+    },
+    "ration": {
+      "description": "Today's ration: maxBreadsPerDay, or epidemicRation during an epidemic. Nobody eats more than this",
+      "type": "integer"
     },
     "salary": {
       "description": "Wage everyone receives every tick",

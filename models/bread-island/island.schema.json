@@ -7,9 +7,9 @@
   },
   "context": {
     "salary": { "type": "float", "default": 10, "description": "Wage everyone receives every tick" },
-    "landsFree": { "type": "int", "default": 10, "min": 0, "description": "Plots the island still has for sale. Buying one when none is left is rejected" },
+    "landsFree": { "type": "int", "default": 15, "min": 0, "description": "Plots the island still has for sale. Buying one when none is left is rejected" },
     "islandLandPrice": { "type": "float", "default": 100, "description": "Price of a free plot bought from the island" },
-    "breadsPerLand": { "type": "int", "default": 10, "description": "Bread each plot yields per tick" },
+    "breadsPerLand": { "type": "int", "default": 40, "description": "Bread each plot yields per tick" },
     "productionCost": { "type": "float", "default": 0.5, "min": 0, "max": 1, "description": "Share of each sale that covers production cost; the rest is the producer's profit" },
     "marketPrice": { "type": "float", "default": 2, "description": "Average price paid for bread in the last day with trades; producers and land traders use it to value land" },
     "minPrice": { "type": "float", "default": 0.1, "description": "Producers never ask less than this" },
@@ -18,13 +18,29 @@
     "hungerPremium": { "type": "float", "default": 1, "description": "Each point of hunger adds this amount to what a buyer is willing to pay" },
     "outbid": { "type": "float", "default": 0.1, "description": "How far above the cheapest posted price buyers go when bread is scarce: the cap is lowestAsk x (1 + outbid x scarcity)" },
     "marginalDiscount": { "type": "float", "default": 0.1, "description": "Each extra bread of the day is worth this fraction less to the buyer than the first one" },
-    "maxBreadsPerDay": { "type": "int", "default": 3, "description": "Most bread a person eats in a day; eating this many resets hunger to 0" },
+    "maxBreadsPerDay": { "type": "int", "default": 3, "description": "Normal daily ration: eating this many breads resets hunger to 0" },
+    "ration": { "type": "int", "default": 3, "description": "Today's ration: maxBreadsPerDay, or epidemicRation during an epidemic. Nobody eats more than this" },
+    "productionFactor": { "type": "float", "default": 1, "description": "Today's harvest multiplier: lower in a drought, higher in a golden age" },
+
+    "droughtChance": { "type": "float", "default": 0.01, "description": "Daily chance that a drought starts (when the weather is normal)" },
+    "droughtDuration": { "type": "int", "default": 20, "description": "Days a drought lasts" },
+    "droughtImpact": { "type": "float", "default": 0.5, "description": "Share of the harvest lost during a drought" },
+    "goldenChance": { "type": "float", "default": 0.01, "description": "Daily chance that a golden age starts (when the weather is normal)" },
+    "goldenDuration": { "type": "int", "default": 20, "description": "Days a golden age lasts" },
+    "goldenImpact": { "type": "float", "default": 0.5, "description": "Extra share of harvest during a golden age" },
+    "epidemicChance": { "type": "float", "default": 0.005, "description": "Daily chance that an epidemic starts" },
+    "epidemicDuration": { "type": "int", "default": 30, "description": "Days an epidemic lasts" },
+    "epidemicRation": { "type": "int", "default": 4, "description": "Breads needed to reset hunger during an epidemic" },
+    "droughtDaysLeft": { "type": "int", "min": 0, "description": "Days left of the current drought" },
+    "goldenDaysLeft": { "type": "int", "min": 0, "description": "Days left of the current golden age" },
+    "epidemicDaysLeft": { "type": "int", "min": 0, "description": "Days left of the current epidemic" },
     "hungerPerDay": { "type": "int", "default": 3, "description": "Hunger added on a day without a full ration; each bread eaten removes 1" },
-    "starvationDays": { "type": "int", "default": 3, "description": "Consecutive days without any bread that kill a person" },
+    "starvationDays": { "type": "int", "default": 7, "description": "Consecutive days without any bread that kill a person" },
     "birthChance": { "type": "float", "default": 0.01, "description": "Daily chance that a person with zero hunger has a child" },
     "landHorizon": { "type": "float", "default": 15, "description": "Days of expected profit a plot is worth to an average trader" },
 
-    "breadBids": { "type": "map", "of": "float", "description": "Today's bread bids, one per unit, keyed <agent id>.<unit> (1 = the day's first bread)" },
+    "breadBids": { "type": "map", "of": "float", "description": "Today's bread bids, one per unit, keyed <agent id>.<unit> (1 = the day's first bread): the price the buyer offers" },
+    "breadBidMax": { "type": "map", "of": "float", "description": "Most the buyer accepts to pay for that unit if the cheaper bread is gone; same keys as breadBids" },
     "breadAskQty": { "type": "map", "of": "int", "description": "Today's bread offers: units for sale, by agent id" },
     "breadAskPrice": { "type": "map", "of": "float", "description": "Today's bread offers: price per unit, by agent id" },
     "landBids": { "type": "map", "of": "float", "description": "Offers to buy one plot from another producer, by agent id" },
@@ -46,7 +62,7 @@
       "description": "A person. A consumer while owning no land, a producer while owning at least one plot.",
       "attributes": {
         "wealth": { "type": "float", "min": 0, "clamp": true, "description": "Savings" },
-        "hunger": { "type": "int", "min": 0, "visibility": "public", "description": "0 after a day with maxBreadsPerDay breads; otherwise grows by hungerPerDay and falls by 1 per bread eaten" },
+        "hunger": { "type": "int", "min": 0, "visibility": "public", "description": "0 after a day with a full ration; otherwise grows by hungerPerDay and falls by 1 per bread eaten" },
         "daysWithoutFood": { "type": "int", "min": 0, "description": "Consecutive days without any bread" },
         "ateToday": { "type": "int", "min": 0, "description": "Bread eaten today" },
         "income": { "type": "float", "description": "Wage and profit received today" },
@@ -55,7 +71,8 @@
         "stock": { "type": "int", "min": 0, "description": "Bread produced today and not yet sold" },
         "askPrice": { "type": "float", "default": 2, "visibility": "public", "description": "Price the producer asks per bread" },
         "riskTolerance": { "type": "float", "min": 0, "max": 1, "description": "Willingness to put savings at risk" },
-        "ambition": { "type": "float", "min": 0, "max": 1, "description": "Drive to own and expand a business" }
+        "ambition": { "type": "float", "min": 0, "max": 1, "description": "Drive to own and expand a business" },
+        "frugality": { "type": "float", "min": 0, "max": 1, "description": "How much the person prefers saving to eating well: frugal people wait longer before buying and pay less for bread beyond what keeps them alive" }
       },
       "memory": {
         "salePrices": { "type": "float", "capacity": 5, "description": "Prices paid by the producer's last 5 customers" }
@@ -86,6 +103,7 @@
   },
   "rules": [
     { "name": "new_day", "phase": "pre", "script": "scripts/new_day.lua", "description": "Resets the daily counters" },
+    { "name": "events", "phase": "pre", "script": "scripts/events.lua", "description": "Random droughts, golden ages and epidemics" },
     { "name": "morning", "phase": "pre", "agentType": "islander", "script": "scripts/morning.lua", "description": "Wage, and producers bake today's bread" },
     { "name": "quotes", "phase": "pre", "script": "scripts/quotes.lua", "description": "Publishes the cheapest price producers are asking today" },
     { "name": "orders", "phase": "pre", "agentType": "islander", "script": "scripts/orders.lua", "description": "Everyone bids for bread according to hunger, savings and posted prices; producers offer their stock" },
@@ -103,6 +121,8 @@
     { "name": "unmetDemand", "context": "unmetDemand" },
     { "name": "deaths", "context": "deaths" },
     { "name": "births", "context": "births" },
+    { "name": "productionFactor", "context": "productionFactor" },
+    { "name": "ration", "context": "ration" },
     { "name": "hunger.mean", "agg": "mean", "agentType": "islander", "attribute": "hunger" },
     { "name": "wealth.mean", "agg": "mean", "agentType": "islander", "attribute": "wealth" },
     { "name": "wealth.gini", "agg": "gini", "agentType": "islander", "attribute": "wealth" }

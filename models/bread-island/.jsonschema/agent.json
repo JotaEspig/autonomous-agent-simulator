@@ -108,10 +108,23 @@
                 }
               ]
             },
+            "frugality": {
+              "anyOf": [
+                {
+                  "description": "How much the person prefers saving to eating well: frugal people wait longer before buying and pay less for bread beyond what keeps them alive",
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
             "hunger": {
               "anyOf": [
                 {
-                  "description": "0 after a day with maxBreadsPerDay breads; otherwise grows by hungerPerDay and falls by 1 per bread eaten",
+                  "description": "0 after a day with a full ration; otherwise grows by hungerPerDay and falls by 1 per bread eaten",
                   "minimum": 0,
                   "type": "integer"
                 },

@@ -1,9 +1,9 @@
 {
   "$schema": "./.jsonschema/context.json",
   "salary": 10,
-  "landsFree": 10,
+  "landsFree": 15,
   "islandLandPrice": 100,
-  "breadsPerLand": 10,
+  "breadsPerLand": 40,
   "productionCost": 0.5,
   "marketPrice": 2,
   "priceDrop": 0.2,
@@ -12,6 +12,6 @@
   "hungerPremium": 1,
   "maxBreadsPerDay": 3,
   "hungerPerDay": 3,
-  "starvationDays": 3,
+  "starvationDays": 7,
   "birthChance": 0.01
 }

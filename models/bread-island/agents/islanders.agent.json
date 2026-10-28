@@ -3,11 +3,29 @@
   "description": "Everyone starts as a consumer, with some savings and a personality.",
   "type": "islander",
   "name": "islanders",
-  "count": 100,
+  "count": 500,
   "attributes": {
-    "wealth": { "dist": "normal", "mean": 50, "std": 40, "min": 0 },
-    "riskTolerance": { "dist": "uniform", "min": 0, "max": 1 },
-    "ambition": { "dist": "uniform", "min": 0, "max": 1 },
-    "lands": 0
+    "wealth": {
+      "dist": "normal",
+      "mean": 50,
+      "std": 40,
+      "min": 0
+    },
+    "riskTolerance": {
+      "dist": "uniform",
+      "min": 0,
+      "max": 1
+    },
+    "ambition": {
+      "dist": "uniform",
+      "min": 0,
+      "max": 1
+    },
+    "lands": 0,
+    "frugality": {
+      "dist": "uniform",
+      "min": 0,
+      "max": 1
+    }
   }
 }
