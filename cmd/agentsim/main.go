@@ -96,7 +96,11 @@ func cmdValidate(args []string) error {
 		return err
 	}
 	defer e.Close()
-	for _, w := range e.Warnings {
+	warnings := e.Warnings
+	if _, err := os.Stat(filepath.Join(m.Dir, "README.md")); err != nil {
+		warnings = append(warnings, "README.md not found: document the model's agents, context, decisions and rules (see docs/modeling-guide.md)")
+	}
+	for _, w := range warnings {
 		fmt.Println("warning:", w)
 	}
 	fmt.Printf("model %q is valid\n", m.Name)
