@@ -1,0 +1,7 @@
+{
+  "$schema": "../.jsonschema/agent.json",
+  "description": "A straight player: very honest, barely greedy, but resents being betrayed.",
+  "type": "player",
+  "name": "honest",
+  "attributes": { "honesty": 0.9, "greed": 0.05, "grudge": 0.6 }
+}

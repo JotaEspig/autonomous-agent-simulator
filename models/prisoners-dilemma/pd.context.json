@@ -1,0 +1,7 @@
+{
+  "$schema": "./.jsonschema/context.json",
+  "temptation": 5,
+  "reward": 3,
+  "punishment": 1,
+  "sucker": 0
+}

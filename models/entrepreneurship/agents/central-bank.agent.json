@@ -1,0 +1,6 @@
+{
+  "$schema": "../.jsonschema/agent.json",
+  "type": "centralBank",
+  "name": "central-bank",
+  "attributes": { "aggressiveness": 50, "target": 0.05 }
+}

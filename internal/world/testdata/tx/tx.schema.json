@@ -1,0 +1,20 @@
+{
+  "name": "tx",
+  "simulation": { "maxTicks": 1 },
+  "context": {
+    "pot": { "type": "int", "min": 0 },
+    "flag": { "type": "string" },
+    "first": { "type": "string", "merge": "first" },
+    "votes": { "type": "map", "of": "int" }
+  },
+  "relations": { "friend": {} },
+  "agentTypes": {
+    "a": {
+      "attributes": {
+        "cash": { "type": "int", "min": 0 },
+        "mood": { "type": "float", "min": 0, "max": 1, "clamp": true }
+      },
+      "memory": { "seen": { "type": "int", "capacity": 3 } }
+    }
+  }
+}

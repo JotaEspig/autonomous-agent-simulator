@@ -1,0 +1,169 @@
+{
+  "$defs": {
+    "distribution": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "dist": {
+          "enum": [
+            "uniform",
+            "normal",
+            "bernoulli",
+            "choice"
+          ]
+        },
+        "max": {
+          "type": "number"
+        },
+        "mean": {
+          "type": "number"
+        },
+        "min": {
+          "type": "number"
+        },
+        "p": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "std": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "values": {
+          "type": "array"
+        },
+        "weights": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "dist"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "additionalProperties": false,
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "attributes": {
+          "additionalProperties": false,
+          "properties": {
+            "betrayed": {
+              "anyOf": [
+                {
+                  "description": "Rounds in which this player cooperated and the opponent defected",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "greed": {
+              "anyOf": [
+                {
+                  "description": "Temptation to exploit an opponent who has been trusting",
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "grudge": {
+              "anyOf": [
+                {
+                  "description": "How strongly being betrayed reduces cooperation",
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "honesty": {
+              "anyOf": [
+                {
+                  "description": "Baseline inclination to cooperate",
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "score": {
+              "anyOf": [
+                {
+                  "description": "Accumulated payoff",
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "count": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "description": {
+          "type": "string"
+        },
+        "links": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "relation": {
+                "enum": [
+                  "opponent"
+                ]
+              },
+              "to": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "relation",
+              "to"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "const": "player"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    }
+  ],
+  "title": "prisoners-dilemma agent file"
+}

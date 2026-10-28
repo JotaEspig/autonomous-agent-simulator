@@ -1,0 +1,7 @@
+{
+  "$schema": "../.jsonschema/agent.json",
+  "description": "A crook: little honesty, a lot of greed and a short memory for grudges.",
+  "type": "player",
+  "name": "trickster",
+  "attributes": { "honesty": 0.2, "greed": 0.9, "grudge": 0.2 }
+}

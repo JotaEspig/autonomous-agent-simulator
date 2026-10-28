@@ -1,0 +1,62 @@
+{
+  "name": "prisoners-dilemma",
+  "description": "Iterated prisoner's dilemma. Players never act on each other directly: each one writes its move to the context, and a rule settles the round.",
+  "simulation": {
+    "maxTicks": 100
+  },
+  "context": {
+    "temptation": { "type": "float", "default": 5, "description": "T: payoff for defecting against a cooperator" },
+    "reward": { "type": "float", "default": 3, "description": "R: payoff when both cooperate" },
+    "punishment": { "type": "float", "default": 1, "description": "P: payoff when both defect" },
+    "sucker": { "type": "float", "default": 0, "description": "S: payoff for cooperating against a defector" },
+    "moves": {
+      "type": "map",
+      "of": "string",
+      "values": ["C", "D"],
+      "description": "Moves of the current round, keyed by agent id. Each agent writes only its own key, so writes never conflict."
+    },
+    "cooperationRate": { "type": "float", "description": "Share of cooperative moves in the last settled round" }
+  },
+  "relations": {
+    "opponent": { "description": "Who plays against whom this round; set by the matchmaking rule" }
+  },
+  "agentTypes": {
+    "player": {
+      "attributes": {
+        "honesty": { "type": "float", "min": 0, "max": 1, "default": 0.5, "description": "Baseline inclination to cooperate" },
+        "greed": { "type": "float", "min": 0, "max": 1, "description": "Temptation to exploit an opponent who has been trusting" },
+        "grudge": { "type": "float", "min": 0, "max": 1, "description": "How strongly being betrayed reduces cooperation" },
+        "score": { "type": "float", "visibility": "public", "description": "Accumulated payoff" },
+        "betrayed": { "type": "int", "min": 0, "description": "Rounds in which this player cooperated and the opponent defected" }
+      },
+      "memory": {
+        "opponentMoves": { "type": "string", "capacity": 10, "description": "Last moves of this player's opponents" }
+      },
+      "decisions": ["cooperate", "defect"]
+    }
+  },
+  "decisions": {
+    "cooperate": {
+      "description": "Play C. The propensity drops as the share of betrayals in memory grows, weighted by grudge.",
+      "script": "scripts/cooperate.lua",
+      "propensity": "honesty * (1 - grudge * count(\"opponentMoves\", \"D\") / max(memlen(\"opponentMoves\"), 1))"
+    },
+    "defect": {
+      "description": "Play D. The propensity is computed in Lua: dishonesty, plus greed when the opponent has been trusting, plus resentment after betrayals.",
+      "script": "scripts/defect.lua"
+    }
+  },
+  "rules": [
+    { "name": "matchmaking", "phase": "pre", "script": "scripts/matchmaking.lua" },
+    { "name": "settle", "phase": "post", "script": "scripts/settle.lua" }
+  ],
+  "metrics": [
+    { "name": "trickster.score", "agent": "trickster", "attribute": "score" },
+    { "name": "honest.score", "agent": "honest", "attribute": "score" },
+    { "name": "score.mean", "agg": "mean", "agentType": "player", "attribute": "score" },
+    { "name": "cooperationRate", "context": "cooperationRate" }
+  ],
+  "output": {
+    "log": "decisions"
+  }
+}

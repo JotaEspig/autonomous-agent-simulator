@@ -1,0 +1,9 @@
+{
+  "name": "sandbox",
+  "simulation": { "maxTicks": 1 },
+  "context": { "secret": { "type": "int", "visibility": "hidden" } },
+  "agentTypes": {
+    "a": { "attributes": { "hidden": { "type": "int" }, "shown": { "type": "int", "visibility": "public" } } }
+  },
+  "rules": [{ "script": "s.lua" }]
+}

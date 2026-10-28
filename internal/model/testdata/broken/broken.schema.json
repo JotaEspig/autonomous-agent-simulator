@@ -1,0 +1,11 @@
+{
+  "name": "broken",
+  "simulation": { "maxTicks": 0 },
+  "agentTypes": {
+    "p": {
+      "attributes": { "id": { "type": "flaot" } },
+      "decisions": ["missing"]
+    }
+  },
+  "metrics": [{ "name": "m" }]
+}
