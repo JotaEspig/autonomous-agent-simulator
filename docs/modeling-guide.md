@@ -8,11 +8,17 @@ emerge from rules instead of scripting outcomes.
 
 ```
 my-model/
+  README.md                what the model is about: agents, context, decisions, rules, metrics
   my-model.schema.json     the mold: context, agent types, decisions, rules, metrics
   my-model.context.json    optional: initial values of the context
   agents/*.agent.json      one agent, or a generated population, per file
   scripts/*.lua            decision logic, rules, metrics, stop condition
 ```
+
+Every model has a `README.md` explaining the question it explores, the context fields, each
+agent type and its attributes, the decisions (eligibility, propensity, effects), the rules,
+the metrics, and what results to expect. `agentsim validate` warns when it is missing. The
+example models under `models/` follow this structure.
 
 Run `agentsim validate my-model` after every change: it reports every problem it finds
 (unknown keys, typos in types, missing scripts, bad expressions, misnamed hooks) at once.
