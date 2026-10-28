@@ -48,7 +48,7 @@ func equalRows(a, b [][]float64) bool {
 }
 
 func TestDeterministicAcrossWorkerCounts(t *testing.T) {
-	for _, dir := range []string{"../../models/prisoners-dilemma", "../../models/entrepreneurship"} {
+	for _, dir := range []string{"../../models/prisoners-dilemma", "../../models/entrepreneurship", "../../models/bread-island"} {
 		t.Run(dir, func(t *testing.T) {
 			one := run(t, dir, 7, 1, 30)
 			four := run(t, dir, 7, 4, 30)

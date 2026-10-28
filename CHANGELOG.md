@@ -21,8 +21,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `agentsim validate`, `agentsim run` (multiple seeds in parallel, aggregated statistics) and
   `agentsim jsonschema` (editor autocompletion for agent and context files).
 - Outputs: JSONL event log with levels and sampling, per-tick metrics CSV, JSON snapshots.
-- Example models: prisoner's dilemma, entrepreneurship with a central bank, and a one-million-agent
-  benchmark.
+- Example models: prisoner's dilemma, entrepreneurship with a central bank, a bread island with supply
+  and demand for perishable food and scarce land, and a one-million-agent benchmark.
 - Modeling guide and architecture documentation.
 - A `README.md` for every example model, describing its agents, context, decisions, rules and metrics;
   `agentsim validate` warns when a model has no `README.md`.

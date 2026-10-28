@@ -1,0 +1,114 @@
+{
+  "name": "bread-island",
+  "description": "Supply and demand on an island where bread is the only food. Everyone earns a fixed wage and must eat; anyone who can afford a plot of the island's limited land may become a bread producer. Bread is traded in a double auction every day, land in a land market.",
+  "simulation": {
+    "maxTicks": 365,
+    "stop": "scripts/stop.lua"
+  },
+  "context": {
+    "salary": { "type": "float", "default": 10, "description": "Wage everyone receives every tick" },
+    "landsFree": { "type": "int", "default": 10, "min": 0, "description": "Plots the island still has for sale. Buying one when none is left is rejected" },
+    "islandLandPrice": { "type": "float", "default": 100, "description": "Price of a free plot bought from the island" },
+    "breadsPerLand": { "type": "int", "default": 10, "description": "Bread each plot yields per tick" },
+    "productionCost": { "type": "float", "default": 0.5, "min": 0, "max": 1, "description": "Share of each sale that covers production cost; the rest is the producer's profit" },
+    "marketPrice": { "type": "float", "default": 2, "description": "Average price paid for bread in the last day with trades; producers and land traders use it to value land" },
+    "minPrice": { "type": "float", "default": 0.1, "description": "Producers never ask less than this" },
+    "priceDrop": { "type": "float", "default": 0.2, "description": "How much a producer lowers its price after a day with unsold bread" },
+    "basePrice": { "type": "float", "default": 2, "description": "The island's reference price for bread: what a person with no hunger offers" },
+    "hungerPremium": { "type": "float", "default": 1, "description": "Each point of hunger adds this amount to what a buyer is willing to pay" },
+    "outbid": { "type": "float", "default": 0.1, "description": "How far above the cheapest posted price buyers go when bread is scarce: the cap is lowestAsk x (1 + outbid x scarcity)" },
+    "marginalDiscount": { "type": "float", "default": 0.1, "description": "Each extra bread of the day is worth this fraction less to the buyer than the first one" },
+    "maxBreadsPerDay": { "type": "int", "default": 3, "description": "Most bread a person eats in a day; eating this many resets hunger to 0" },
+    "hungerPerDay": { "type": "int", "default": 3, "description": "Hunger added on a day without a full ration; each bread eaten removes 1" },
+    "starvationDays": { "type": "int", "default": 3, "description": "Consecutive days without any bread that kill a person" },
+    "birthChance": { "type": "float", "default": 0.01, "description": "Daily chance that a person with zero hunger has a child" },
+    "landHorizon": { "type": "float", "default": 15, "description": "Days of expected profit a plot is worth to an average trader" },
+
+    "breadBids": { "type": "map", "of": "float", "description": "Today's bread bids, one per unit, keyed <agent id>.<unit> (1 = the day's first bread)" },
+    "breadAskQty": { "type": "map", "of": "int", "description": "Today's bread offers: units for sale, by agent id" },
+    "breadAskPrice": { "type": "map", "of": "float", "description": "Today's bread offers: price per unit, by agent id" },
+    "landBids": { "type": "map", "of": "float", "description": "Offers to buy one plot from another producer, by agent id" },
+    "landAsks": { "type": "map", "of": "float", "description": "Offers to sell one plot, by agent id" },
+
+    "lowestAsk": { "type": "float", "description": "Cheapest price posted by a producer with bread today (0 when nobody is selling)" },
+    "breadSold": { "type": "int", "description": "Bread sold today" },
+    "breadWasted": { "type": "int", "description": "Bread produced today and not sold (it expires)" },
+    "unmetDemand": { "type": "int", "description": "Bread people wanted today and could not buy" },
+    "sellRate": { "type": "float", "default": 1, "description": "Share of today's bread that was sold" },
+    "scarcity": { "type": "float", "description": "Share of today's demand that went unmet" },
+    "landPrice": { "type": "float", "default": 100, "description": "Price of the last plot traded between producers" },
+    "bestLandBid": { "type": "float", "description": "Highest bid for land that found no seller yesterday" },
+    "deaths": { "type": "int", "description": "Deaths today" },
+    "births": { "type": "int", "description": "Births today" }
+  },
+  "agentTypes": {
+    "islander": {
+      "description": "A person. A consumer while owning no land, a producer while owning at least one plot.",
+      "attributes": {
+        "wealth": { "type": "float", "min": 0, "clamp": true, "description": "Savings" },
+        "hunger": { "type": "int", "min": 0, "visibility": "public", "description": "0 after a day with maxBreadsPerDay breads; otherwise grows by hungerPerDay and falls by 1 per bread eaten" },
+        "daysWithoutFood": { "type": "int", "min": 0, "description": "Consecutive days without any bread" },
+        "ateToday": { "type": "int", "min": 0, "description": "Bread eaten today" },
+        "income": { "type": "float", "description": "Wage and profit received today" },
+        "spent": { "type": "float", "description": "Money spent today on bread and land" },
+        "lands": { "type": "int", "min": 0, "visibility": "public", "description": "Plots owned; 0 means consumer" },
+        "stock": { "type": "int", "min": 0, "description": "Bread produced today and not yet sold" },
+        "askPrice": { "type": "float", "default": 2, "visibility": "public", "description": "Price the producer asks per bread" },
+        "riskTolerance": { "type": "float", "min": 0, "max": 1, "description": "Willingness to put savings at risk" },
+        "ambition": { "type": "float", "min": 0, "max": 1, "description": "Drive to own and expand a business" }
+      },
+      "memory": {
+        "salePrices": { "type": "float", "capacity": 5, "description": "Prices paid by the producer's last 5 customers" }
+      },
+      "choice": { "idle": 1 },
+      "decisions": ["buy_island_land", "bid_for_land", "sell_land"]
+    }
+  },
+  "decisions": {
+    "buy_island_land": {
+      "description": "Buy a free plot from the island. Driven by expected return, unmet demand, personality and one's own hunger.",
+      "script": "scripts/buy_island_land.lua",
+      "eligible": "ctx.landsFree > 0 && wealth >= ctx.islandLandPrice",
+      "propensity": "0.3 * sigmoid(-4 + 25 * ctx.marketPrice * (1 - ctx.productionCost) * ctx.breadsPerLand * ctx.sellRate / ctx.islandLandPrice + 3 * ctx.scarcity + 2 * riskTolerance + 2 * ambition + 0.2 * hunger)"
+    },
+    "bid_for_land": {
+      "description": "When the island is full, offer to buy a plot from another producer.",
+      "script": "scripts/bid_for_land.lua",
+      "eligible": "ctx.landsFree == 0 && wealth >= 0.5 * ctx.islandLandPrice",
+      "propensity": "0.3 * sigmoid(-4 + 25 * ctx.marketPrice * (1 - ctx.productionCost) * ctx.breadsPerLand * ctx.sellRate / ctx.landPrice + 3 * ctx.scarcity + 2 * riskTolerance + 2 * ambition + 0.2 * hunger)"
+    },
+    "sell_land": {
+      "description": "Offer a plot for sale: when bread does not sell, when the owner is hungry, or when buyers are bidding high.",
+      "script": "scripts/sell_land.lua",
+      "eligible": "lands > 0",
+      "propensity": "0.2 * sigmoid(-4 + 4 * (1 - ctx.sellRate) + 0.3 * hunger - 2 * ambition + 3 * (ctx.bestLandBid / ctx.landPrice - 1))"
+    }
+  },
+  "rules": [
+    { "name": "new_day", "phase": "pre", "script": "scripts/new_day.lua", "description": "Resets the daily counters" },
+    { "name": "morning", "phase": "pre", "agentType": "islander", "script": "scripts/morning.lua", "description": "Wage, and producers bake today's bread" },
+    { "name": "quotes", "phase": "pre", "script": "scripts/quotes.lua", "description": "Publishes the cheapest price producers are asking today" },
+    { "name": "orders", "phase": "pre", "agentType": "islander", "script": "scripts/orders.lua", "description": "Everyone bids for bread according to hunger, savings and posted prices; producers offer their stock" },
+    { "name": "bread_market", "phase": "pre", "script": "scripts/bread_market.lua", "description": "Double auction for bread" },
+    { "name": "land_market", "phase": "post", "script": "scripts/land_market.lua", "description": "Matches bids and offers for plots between people" },
+    { "name": "metabolism", "phase": "post", "agentType": "islander", "script": "scripts/metabolism.lua", "description": "Hunger, starvation, the 80% daily spending, price adjustment, expiring bread and births" }
+  ],
+  "metrics": [
+    { "name": "producers", "script": "scripts/producers_metric.lua" },
+    { "name": "landsFree", "context": "landsFree" },
+    { "name": "marketPrice", "context": "marketPrice" },
+    { "name": "landPrice", "context": "landPrice" },
+    { "name": "breadSold", "context": "breadSold" },
+    { "name": "breadWasted", "context": "breadWasted" },
+    { "name": "unmetDemand", "context": "unmetDemand" },
+    { "name": "deaths", "context": "deaths" },
+    { "name": "births", "context": "births" },
+    { "name": "hunger.mean", "agg": "mean", "agentType": "islander", "attribute": "hunger" },
+    { "name": "wealth.mean", "agg": "mean", "agentType": "islander", "attribute": "wealth" },
+    { "name": "wealth.gini", "agg": "gini", "agentType": "islander", "attribute": "wealth" }
+  ],
+  "output": {
+    "log": "decisions",
+    "snapshotEvery": 0
+  }
+}

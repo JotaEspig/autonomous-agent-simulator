@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "basePrice": {
+      "description": "The island's reference price for bread: what a person with no hunger offers",
+      "type": "number"
+    },
+    "bestLandBid": {
+      "description": "Highest bid for land that found no seller yesterday",
+      "type": "number"
+    },
+    "birthChance": {
+      "description": "Daily chance that a person with zero hunger has a child",
+      "type": "number"
+    },
+    "births": {
+      "description": "Births today",
+      "type": "integer"
+    },
+    "breadAskPrice": {
+      "additionalProperties": {
+        "description": "Today's bread offers: price per unit, by agent id",
+        "type": "number"
+      },
+      "description": "Today's bread offers: price per unit, by agent id",
+      "type": "object"
+    },
+    "breadAskQty": {
+      "additionalProperties": {
+        "description": "Today's bread offers: units for sale, by agent id",
+        "type": "integer"
+      },
+      "description": "Today's bread offers: units for sale, by agent id",
+      "type": "object"
+    },
+    "breadBids": {
+      "additionalProperties": {
+        "description": "Today's bread bids, one per unit, keyed \u003cagent id\u003e.\u003cunit\u003e (1 = the day's first bread)",
+        "type": "number"
+      },
+      "description": "Today's bread bids, one per unit, keyed \u003cagent id\u003e.\u003cunit\u003e (1 = the day's first bread)",
+      "type": "object"
+    },
+    "breadSold": {
+      "description": "Bread sold today",
+      "type": "integer"
+    },
+    "breadWasted": {
+      "description": "Bread produced today and not sold (it expires)",
+      "type": "integer"
+    },
+    "breadsPerLand": {
+      "description": "Bread each plot yields per tick",
+      "type": "integer"
+    },
+    "deaths": {
+      "description": "Deaths today",
+      "type": "integer"
+    },
+    "description": {
+      "type": "string"
+    },
+    "hungerPerDay": {
+      "description": "Hunger added on a day without a full ration; each bread eaten removes 1",
+      "type": "integer"
+    },
+    "hungerPremium": {
+      "description": "Each point of hunger adds this amount to what a buyer is willing to pay",
+      "type": "number"
+    },
+    "islandLandPrice": {
+      "description": "Price of a free plot bought from the island",
+      "type": "number"
+    },
+    "landAsks": {
+      "additionalProperties": {
+        "description": "Offers to sell one plot, by agent id",
+        "type": "number"
+      },
+      "description": "Offers to sell one plot, by agent id",
+      "type": "object"
+    },
+    "landBids": {
+      "additionalProperties": {
+        "description": "Offers to buy one plot from another producer, by agent id",
+        "type": "number"
+      },
+      "description": "Offers to buy one plot from another producer, by agent id",
+      "type": "object"
+    },
+    "landHorizon": {
+      "description": "Days of expected profit a plot is worth to an average trader",
+      "type": "number"
+    },
+    "landPrice": {
+      "description": "Price of the last plot traded between producers",
+      "type": "number"
+    },
+    "landsFree": {
+      "description": "Plots the island still has for sale. Buying one when none is left is rejected",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "lowestAsk": {
+      "description": "Cheapest price posted by a producer with bread today (0 when nobody is selling)",
+      "type": "number"
+    },
+    "marginalDiscount": {
+      "description": "Each extra bread of the day is worth this fraction less to the buyer than the first one",
+      "type": "number"
+    },
+    "marketPrice": {
+      "description": "Average price paid for bread in the last day with trades; producers and land traders use it to value land",
+      "type": "number"
+    },
+    "maxBreadsPerDay": {
+      "description": "Most bread a person eats in a day; eating this many resets hunger to 0",
+      "type": "integer"
+    },
+    "minPrice": {
+      "description": "Producers never ask less than this",
+      "type": "number"
+    },
+    "outbid": {
+      "description": "How far above the cheapest posted price buyers go when bread is scarce: the cap is lowestAsk x (1 + outbid x scarcity)",
+      "type": "number"
+    },
+    "priceDrop": {
+      "description": "How much a producer lowers its price after a day with unsold bread",
+      "type": "number"
+    },
+    "productionCost": {
+      "description": "Share of each sale that covers production cost; the rest is the producer's profit",
+      "maximum": 1,
+      "minimum": 0,
+      "type": "number"
+    },
+    "salary": {
+      "description": "Wage everyone receives every tick",
+      "type": "number"
+    },
+    "scarcity": {
+      "description": "Share of today's demand that went unmet",
+      "type": "number"
+    },
+    "sellRate": {
+      "description": "Share of today's bread that was sold",
+      "type": "number"
+    },
+    "starvationDays": {
+      "description": "Consecutive days without any bread that kill a person",
+      "type": "integer"
+    },
+    "unmetDemand": {
+      "description": "Bread people wanted today and could not buy",
+      "type": "integer"
+    }
+  },
+  "title": "bread-island context file",
+  "type": "object"
+}

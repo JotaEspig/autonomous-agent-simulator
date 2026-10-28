@@ -1,0 +1,218 @@
+{
+  "$defs": {
+    "distribution": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "dist": {
+          "enum": [
+            "uniform",
+            "normal",
+            "bernoulli",
+            "choice"
+          ]
+        },
+        "max": {
+          "type": "number"
+        },
+        "mean": {
+          "type": "number"
+        },
+        "min": {
+          "type": "number"
+        },
+        "p": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "std": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "values": {
+          "type": "array"
+        },
+        "weights": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "dist"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "additionalProperties": false,
+      "description": "A person. A consumer while owning no land, a producer while owning at least one plot.",
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "attributes": {
+          "additionalProperties": false,
+          "properties": {
+            "ambition": {
+              "anyOf": [
+                {
+                  "description": "Drive to own and expand a business",
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "askPrice": {
+              "anyOf": [
+                {
+                  "description": "Price the producer asks per bread",
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "ateToday": {
+              "anyOf": [
+                {
+                  "description": "Bread eaten today",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "daysWithoutFood": {
+              "anyOf": [
+                {
+                  "description": "Consecutive days without any bread",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "hunger": {
+              "anyOf": [
+                {
+                  "description": "0 after a day with maxBreadsPerDay breads; otherwise grows by hungerPerDay and falls by 1 per bread eaten",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "income": {
+              "anyOf": [
+                {
+                  "description": "Wage and profit received today",
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "lands": {
+              "anyOf": [
+                {
+                  "description": "Plots owned; 0 means consumer",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "riskTolerance": {
+              "anyOf": [
+                {
+                  "description": "Willingness to put savings at risk",
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "spent": {
+              "anyOf": [
+                {
+                  "description": "Money spent today on bread and land",
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "stock": {
+              "anyOf": [
+                {
+                  "description": "Bread produced today and not yet sold",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "wealth": {
+              "anyOf": [
+                {
+                  "description": "Savings",
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "count": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "const": "islander"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    }
+  ],
+  "title": "bread-island agent file"
+}

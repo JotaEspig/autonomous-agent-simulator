@@ -26,7 +26,7 @@ func TestLoadReportsEveryError(t *testing.T) {
 }
 
 func TestLoadExampleModels(t *testing.T) {
-	for _, dir := range []string{"../../models/prisoners-dilemma", "../../models/entrepreneurship", "../../models/benchmark"} {
+	for _, dir := range []string{"../../models/prisoners-dilemma", "../../models/entrepreneurship", "../../models/bread-island", "../../models/benchmark"} {
 		if _, err := Load(dir); err != nil {
 			t.Errorf("%s: %v", dir, err)
 		}
