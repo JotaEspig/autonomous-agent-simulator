@@ -25,5 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   and demand for perishable food and scarce land (posted prices and an order book, hunger, ageing,
   inheritance, and random droughts, golden ages and epidemics), and a one-million-agent benchmark.
 - Modeling guide and architecture documentation.
+- `scenario-builder`, a Claude Code skill that turns a real-life situation into a model, with agent
+  behavior grounded in how real actors behave, a library of behavioral formulas and a review checklist.
 - A `README.md` for every example model, describing its agents, context, decisions, rules and metrics;
   `agentsim validate` warns when a model has no `README.md`.

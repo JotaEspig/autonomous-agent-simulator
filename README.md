@@ -57,6 +57,10 @@ end
 - [Architecture](docs/architecture.md): how the engine works, determinism, performance.
 - [Contributing](CONTRIBUTING.md): commit, pull request and changelog conventions.
 
+With [Claude Code](https://claude.com/claude-code), the project skill `/scenario-builder` builds
+and reviews scenarios: it asks the questions that matter, models each agent from how its
+real-world counterpart behaves, and verifies behavior before looking at results.
+
 ## Example models
 
 | Model                      | Shows                                                                      |
