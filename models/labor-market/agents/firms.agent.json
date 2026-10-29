@@ -1,0 +1,11 @@
+{
+  "$schema": "../.jsonschema/agent.json",
+  "description": "The sector at the start: 20 firms with the same capital and different appetites for keeping a share of what their staff produce.",
+  "type": "firm",
+  "name": "firms",
+  "count": 20,
+  "attributes": {
+    "cash": 500000,
+    "markdown": { "dist": "uniform", "min": 0.2, "max": 0.5 }
+  }
+}

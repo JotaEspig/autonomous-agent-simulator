@@ -1,0 +1,14 @@
+{
+  "$schema": "../.jsonschema/agent.json",
+  "description": "The labor force at the start: aged 18 to 64, all juniors with a starting capacity around 1 and a talent (the capacity a lifetime of work approaches) around 2.5, and some savings.",
+  "type": "worker",
+  "name": "workers",
+  "count": 2000,
+  "attributes": {
+    "age": { "dist": "uniform", "min": 216, "max": 779 },
+    "capacity": { "dist": "normal", "mean": 1, "std": 0.2, "min": 0.5, "max": 1.5 },
+    "talent": { "dist": "normal", "mean": 2.5, "std": 0.6, "min": 1.2, "max": 4 },
+    "savings": { "dist": "normal", "mean": 5000, "std": 4000, "min": 0 },
+    "level": "junior"
+  }
+}
