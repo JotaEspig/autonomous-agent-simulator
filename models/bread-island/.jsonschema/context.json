@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "basePrice": {
+      "description": "The island's reference price for bread: everyone's initial price limit",
+      "type": "number"
+    },
+    "bestLandBid": {
+      "description": "Highest bid for land that found no seller yesterday",
+      "type": "number"
+    },
+    "bidRaise": {
+      "description": "How much a person raises its price limit after a day without a full ration, scaled by the share of the ration missed",
+      "type": "number"
+    },
+    "bidRelax": {
+      "description": "How much a person lowers its price limit after a day with a full ration, to test whether bread can be had for less",
+      "type": "number"
+    },
+    "birthChance": {
+      "description": "Daily chance that a person with zero hunger has a child",
+      "type": "number"
+    },
+    "births": {
+      "description": "Births today",
+      "type": "integer"
+    },
+    "breadAskPrice": {
+      "additionalProperties": {
+        "description": "Today's posted offers: price per bread, by producer id",
+        "type": "number"
+      },
+      "description": "Today's posted offers: price per bread, by producer id",
+      "type": "object"
+    },
+    "breadAskQty": {
+      "additionalProperties": {
+        "description": "Today's posted offers: bread for sale, by producer id",
+        "type": "integer"
+      },
+      "description": "Today's posted offers: bread for sale, by producer id",
+      "type": "object"
+    },
+    "breadBids": {
+      "additionalProperties": {
+        "description": "Today's buy orders, one per bread, keyed \u003cagent id\u003e.\u003cunit\u003e: the most the buyer pays for it",
+        "type": "number"
+      },
+      "description": "Today's buy orders, one per bread, keyed \u003cagent id\u003e.\u003cunit\u003e: the most the buyer pays for it",
+      "type": "object"
+    },
+    "breadSold": {
+      "description": "Bread sold today",
+      "type": "integer"
+    },
+    "breadWasted": {
+      "description": "Bread produced today and not sold (it expires)",
+      "type": "integer"
+    },
+    "breadsPerLand": {
+      "description": "Bread each plot yields per tick",
+      "type": "integer"
+    },
+    "daysPerYear": {
+      "description": "Ticks in a year; ticks are days",
+      "type": "integer"
+    },
+    "deaths": {
+      "description": "Deaths today",
+      "type": "integer"
+    },
+    "description": {
+      "type": "string"
+    },
+    "droughtChance": {
+      "description": "Daily chance that a drought starts (when the weather is normal)",
+      "type": "number"
+    },
+    "droughtDaysLeft": {
+      "description": "Days left of the current drought",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "droughtDuration": {
+      "description": "Days a drought lasts",
+      "type": "integer"
+    },
+    "droughtImpact": {
+      "description": "Share of the harvest lost during a drought",
+      "type": "number"
+    },
+    "epidemicChance": {
+      "description": "Daily chance that an epidemic starts",
+      "type": "number"
+    },
+    "epidemicDaysLeft": {
+      "description": "Days left of the current epidemic",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "epidemicDuration": {
+      "description": "Days an epidemic lasts",
+      "type": "integer"
+    },
+    "epidemicRation": {
+      "description": "Breads needed to reset hunger during an epidemic",
+      "type": "integer"
+    },
+    "freeLandPrice": {
+      "description": "What the island asks today for a free plot. Falls by landPriceDrop each day free plots find no buyer, so abandoned land gets cheaper until someone can afford it",
+      "type": "number"
+    },
+    "goldenChance": {
+      "description": "Daily chance that a golden age starts (when the weather is normal)",
+      "type": "number"
+    },
+    "goldenDaysLeft": {
+      "description": "Days left of the current golden age",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "goldenDuration": {
+      "description": "Days a golden age lasts",
+      "type": "integer"
+    },
+    "goldenImpact": {
+      "description": "Extra share of harvest during a golden age",
+      "type": "number"
+    },
+    "hungerPerDay": {
+      "description": "Hunger added on a day without any bread. Missing one bread of the ration adds 0, missing two adds 1",
+      "type": "integer"
+    },
+    "islandLandPrice": {
+      "description": "Price the island asks for a plot when it starts selling free plots, and again after all plots are taken",
+      "type": "number"
+    },
+    "islandSalesToday": {
+      "description": "Plots the island sold today",
+      "type": "integer"
+    },
+    "landAsks": {
+      "additionalProperties": {
+        "description": "Offers to sell one plot, by agent id",
+        "type": "number"
+      },
+      "description": "Offers to sell one plot, by agent id",
+      "type": "object"
+    },
+    "landBids": {
+      "additionalProperties": {
+        "description": "Offers to buy one plot from another producer, by agent id",
+        "type": "number"
+      },
+      "description": "Offers to buy one plot from another producer, by agent id",
+      "type": "object"
+    },
+    "landHorizon": {
+      "description": "Days of expected profit a plot is worth to an average trader",
+      "type": "number"
+    },
+    "landPrice": {
+      "description": "Price of the last plot traded between producers",
+      "type": "number"
+    },
+    "landPriceDrop": {
+      "description": "Daily drop of freeLandPrice while free plots find no buyer",
+      "type": "number"
+    },
+    "landsFree": {
+      "description": "Plots the island still has for sale. Buying one when none is left is rejected",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "marketPrice": {
+      "description": "Average price paid for bread in the last day with trades",
+      "type": "number"
+    },
+    "maxBreadsPerDay": {
+      "description": "Normal daily ration: eating this many breads resets hunger to 0",
+      "type": "integer"
+    },
+    "maxHunger": {
+      "description": "Hunger above this kills by malnutrition",
+      "type": "integer"
+    },
+    "minLandPrice": {
+      "description": "Floor of freeLandPrice",
+      "type": "number"
+    },
+    "minPrice": {
+      "description": "Producers never ask less than this",
+      "type": "number"
+    },
+    "mortalityBase": {
+      "description": "Gompertz a: yearly chance of dying of old age at age 0",
+      "type": "number"
+    },
+    "mortalityGrowth": {
+      "description": "Gompertz b: growth of the yearly risk per year of age (risk doubles every ln 2 / b, about 7.7 years)",
+      "type": "number"
+    },
+    "notFullyFed": {
+      "description": "People who did not eat a full ration today",
+      "type": "integer"
+    },
+    "priceCut": {
+      "description": "A producer with unsold bread cuts its price by priceCut x the unsold share of what it offered",
+      "type": "number"
+    },
+    "priceRise": {
+      "description": "How much a producer raises its price after selling its whole stock",
+      "type": "number"
+    },
+    "productionCost": {
+      "description": "Share of each sale that covers production cost; the rest is the producer's profit",
+      "maximum": 1,
+      "minimum": 0,
+      "type": "number"
+    },
+    "productionFactor": {
+      "description": "Today's harvest multiplier: lower in a drought, higher in a golden age",
+      "type": "number"
+    },
+    "ration": {
+      "description": "Today's ration: maxBreadsPerDay, or epidemicRation during an epidemic. Nobody eats more than this",
+      "type": "integer"
+    },
+    "salary": {
+      "description": "Wage everyone receives every tick",
+      "type": "number"
+    },
+    "scarcity": {
+      "description": "Share of today's buy orders that went unfilled",
+      "type": "number"
+    },
+    "sellRate": {
+      "description": "Share of today's bread that was sold",
+      "type": "number"
+    },
+    "starvationDays": {
+      "description": "Consecutive days without any bread that kill a person",
+      "type": "integer"
+    },
+    "undercut": {
+      "description": "A producer left with bread prices at most this far below the market average, since a price far above it is plainly out of line",
+      "type": "number"
+    },
+    "unmetDemand": {
+      "description": "Buy orders placed today that found no bread within their limit",
+      "type": "integer"
+    }
+  },
+  "title": "bread-island context file",
+  "type": "object"
+}

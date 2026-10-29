@@ -1,0 +1,10 @@
+{
+  "type": "worker",
+  "name": "workers",
+  "count": 1000000,
+  "attributes": {
+    "wealth": { "dist": "uniform", "min": 0, "max": 1000 },
+    "skill": { "dist": "uniform", "min": 0, "max": 1 },
+    "thrift": { "dist": "uniform", "min": 0, "max": 1 }
+  }
+}

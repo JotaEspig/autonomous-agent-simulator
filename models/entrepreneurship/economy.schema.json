@@ -1,0 +1,76 @@
+{
+  "name": "entrepreneurship",
+  "description": "People work or open firms; firms earn or lose money and pay dividends to their owners; a central bank moves the interest rate toward a target number of firms per person. Nothing here is known to the engine: it is all schema, data and scripts.",
+  "simulation": {
+    "maxTicks": 240,
+    "stop": "scripts/stop.lua"
+  },
+  "context": {
+    "interestRate": { "type": "float", "default": 0.09, "min": 0, "max": 0.5, "clamp": true, "description": "Base interest rate (yearly), set by the central bank" },
+    "demand": { "type": "float", "default": 1, "min": 0.2, "max": 2, "clamp": true, "description": "Aggregate demand index; 1 is normal" },
+    "businessCost": { "type": "int", "default": 5000, "description": "Capital needed to open a firm" },
+    "wage": { "type": "int", "default": 100, "description": "Income per tick of working" }
+  },
+  "relations": {
+    "owns": { "directed": true, "description": "person -> firm" }
+  },
+  "agentTypes": {
+    "person": {
+      "attributes": {
+        "wealth": { "type": "int", "min": 0, "description": "Cash. Spending more than this is rejected by the engine" },
+        "knowledge": { "type": "float", "min": 0, "max": 1, "description": "Business knowledge; raises the chance a venture works" },
+        "riskTolerance": { "type": "float", "min": 0, "max": 1, "description": "Willingness to take risks" }
+      },
+      "memory": {
+        "ventures": { "type": "bool", "capacity": 5, "description": "Outcome of this person's last ventures" }
+      },
+      "decisions": ["work", "open_business"]
+    },
+    "firm": {
+      "attributes": {
+        "capital": { "type": "int", "visibility": "public" },
+        "age": { "type": "int", "min": 0 }
+      }
+    },
+    "centralBank": {
+      "attributes": {
+        "aggressiveness": { "type": "float", "min": 0, "default": 50, "description": "How strongly the bank reacts to deviations from its target" },
+        "target": { "type": "float", "min": 0, "default": 0.05, "description": "Firms per person the bank aims for. Private: other agents do not know it" }
+      },
+      "activation": { "every": 6 },
+      "choice": { "idle": 1 },
+      "decisions": ["cut_rate", "raise_rate"]
+    }
+  },
+  "decisions": {
+    "work": {
+      "script": "scripts/work.lua",
+      "propensity": "1"
+    },
+    "open_business": {
+      "description": "Pay the business cost up front; with luck and knowledge a firm is born.",
+      "script": "scripts/open_business.lua",
+      "eligible": "wealth >= ctx.businessCost",
+      "propensity": "0.3 * sigmoid(-4 + 3 * knowledge + 3 * riskTolerance - 20 * ctx.interestRate + 2 * (ctx.demand - 1) - count(\"ventures\", false))"
+    },
+    "cut_rate": { "script": "scripts/cut_rate.lua" },
+    "raise_rate": { "script": "scripts/raise_rate.lua" }
+  },
+  "rules": [
+    { "name": "economy", "phase": "pre", "script": "scripts/economy.lua", "description": "Mean-reverting random walk of demand" },
+    { "name": "operate", "phase": "post", "agentType": "firm", "script": "scripts/operate.lua", "description": "Each firm earns or loses money, pays dividends, or closes" }
+  ],
+  "metrics": [
+    { "name": "firms", "agg": "count", "agentType": "firm" },
+    { "name": "wealth.mean", "agg": "mean", "agentType": "person", "attribute": "wealth" },
+    { "name": "wealth.gini", "agg": "gini", "agentType": "person", "attribute": "wealth" },
+    { "name": "capital.mean", "agg": "mean", "agentType": "firm", "attribute": "capital" },
+    { "name": "interestRate", "context": "interestRate" },
+    { "name": "demand", "context": "demand" }
+  ],
+  "output": {
+    "log": "events",
+    "sample": 0.01,
+    "snapshotEvery": 0
+  }
+}

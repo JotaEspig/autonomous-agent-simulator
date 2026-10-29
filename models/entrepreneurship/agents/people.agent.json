@@ -1,0 +1,12 @@
+{
+  "$schema": "../.jsonschema/agent.json",
+  "description": "A population of 10,000 people with heterogeneous wealth, knowledge and risk tolerance.",
+  "type": "person",
+  "name": "people",
+  "count": 10000,
+  "attributes": {
+    "wealth": { "dist": "normal", "mean": 3000, "std": 2500, "min": 0 },
+    "knowledge": { "dist": "uniform", "min": 0, "max": 1 },
+    "riskTolerance": { "dist": "normal", "mean": 0.4, "std": 0.2, "min": 0, "max": 1 }
+  }
+}

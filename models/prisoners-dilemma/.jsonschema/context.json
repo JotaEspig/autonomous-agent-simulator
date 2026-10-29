@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "cooperationRate": {
+      "description": "Share of cooperative moves in the last settled round",
+      "type": "number"
+    },
+    "description": {
+      "type": "string"
+    },
+    "moves": {
+      "additionalProperties": {
+        "description": "Moves of the current round, keyed by agent id. Each agent writes only its own key, so writes never conflict.",
+        "enum": [
+          "C",
+          "D"
+        ],
+        "type": "string"
+      },
+      "description": "Moves of the current round, keyed by agent id. Each agent writes only its own key, so writes never conflict.",
+      "type": "object"
+    },
+    "punishment": {
+      "description": "P: payoff when both defect",
+      "type": "number"
+    },
+    "reward": {
+      "description": "R: payoff when both cooperate",
+      "type": "number"
+    },
+    "sucker": {
+      "description": "S: payoff for cooperating against a defector",
+      "type": "number"
+    },
+    "temptation": {
+      "description": "T: payoff for defecting against a cooperator",
+      "type": "number"
+    }
+  },
+  "title": "prisoners-dilemma context file",
+  "type": "object"
+}

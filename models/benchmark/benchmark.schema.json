@@ -1,0 +1,35 @@
+{
+  "name": "benchmark",
+  "description": "Synthetic load for measuring engine throughput: one million agents choosing between two decisions every tick. One propensity is a native expression, the other a Lua function; both consequences are Lua.",
+  "simulation": { "maxTicks": 10 },
+  "context": {
+    "price": { "type": "float", "default": 1 }
+  },
+  "agentTypes": {
+    "worker": {
+      "attributes": {
+        "wealth": { "type": "int", "min": 0 },
+        "skill": { "type": "float", "min": 0, "max": 1 },
+        "thrift": { "type": "float", "min": 0, "max": 1 }
+      },
+      "memory": {
+        "spent": { "type": "int", "capacity": 4 }
+      },
+      "decisions": ["save", "spend"]
+    }
+  },
+  "decisions": {
+    "save": {
+      "script": "scripts/save.lua",
+      "propensity": "thrift + 0.1 * skill"
+    },
+    "spend": {
+      "script": "scripts/spend.lua"
+    }
+  },
+  "metrics": [
+    { "name": "wealth.mean", "agg": "mean", "agentType": "worker", "attribute": "wealth" },
+    { "name": "wealth.gini", "agg": "gini", "agentType": "worker", "attribute": "wealth" }
+  ],
+  "output": { "log": "none", "snapshotFinal": false }
+}

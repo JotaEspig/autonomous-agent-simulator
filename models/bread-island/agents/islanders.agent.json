@@ -1,0 +1,31 @@
+{
+  "$schema": "../.jsonschema/agent.json",
+  "description": "Everyone starts as a consumer, aged 15 to 70, with some savings and a personality.",
+  "type": "islander",
+  "name": "islanders",
+  "count": 500,
+  "attributes": {
+    "wealth": {
+      "dist": "normal",
+      "mean": 50,
+      "std": 40,
+      "min": 0
+    },
+    "riskTolerance": {
+      "dist": "uniform",
+      "min": 0,
+      "max": 1
+    },
+    "ambition": {
+      "dist": "uniform",
+      "min": 0,
+      "max": 1
+    },
+    "lands": 0,
+    "age": {
+      "dist": "uniform",
+      "min": 5475,
+      "max": 25550
+    }
+  }
+}
