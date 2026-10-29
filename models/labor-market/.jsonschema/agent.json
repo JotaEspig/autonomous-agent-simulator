@@ -1,0 +1,431 @@
+{
+  "$defs": {
+    "distribution": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "dist": {
+          "enum": [
+            "uniform",
+            "normal",
+            "bernoulli",
+            "choice"
+          ]
+        },
+        "max": {
+          "type": "number"
+        },
+        "mean": {
+          "type": "number"
+        },
+        "min": {
+          "type": "number"
+        },
+        "p": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "std": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "values": {
+          "type": "array"
+        },
+        "weights": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "dist"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "additionalProperties": false,
+      "description": "A firm of the sector. Wants to grow its profit by employing capable workers; knows the true capacity of its own staff and reads candidates through interviews.",
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "attributes": {
+          "additionalProperties": false,
+          "properties": {
+            "age": {
+              "anyOf": [
+                {
+                  "description": "Months in business",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "capacitySum": {
+              "anyOf": [
+                {
+                  "description": "Total capacity of the staff: output per month",
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "cash": {
+              "anyOf": [
+                {
+                  "description": "Money in the bank; below what the payroll needs, the firm goes bankrupt",
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "headcount": {
+              "anyOf": [
+                {
+                  "description": "People employed",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "layoffsPlanned": {
+              "anyOf": [
+                {
+                  "description": "People the firm decided to lay off this month",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "margin": {
+              "anyOf": [
+                {
+                  "description": "Profit over revenue last month",
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "markdown": {
+              "anyOf": [
+                {
+                  "description": "Share of a candidate's estimated value the firm tries to keep when making an offer",
+                  "maximum": 0.9,
+                  "minimum": 0.02,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "openings": {
+              "anyOf": [
+                {
+                  "description": "Jobs the firm is recruiting for this month",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "revenue": {
+              "anyOf": [
+                {
+                  "description": "Revenue last month",
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "share": {
+              "anyOf": [
+                {
+                  "description": "Share of the sector's output",
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "underwater": {
+              "anyOf": [
+                {
+                  "description": "Staff whose value to the firm is more than layoffTolerance below their wage",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "wageBill": {
+              "anyOf": [
+                {
+                  "description": "Wages paid last month",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "count": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "const": "firm"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "description": "A person in the labor market. Must pay the cost of living every month; wants the highest pay it can get; knows its level and experience, not its exact capacity.",
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "attributes": {
+          "additionalProperties": false,
+          "properties": {
+            "age": {
+              "anyOf": [
+                {
+                  "description": "Age in months",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "bestOffer": {
+              "anyOf": [
+                {
+                  "description": "Best offer received last month while unemployed; 0 when none",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "capacity": {
+              "anyOf": [
+                {
+                  "description": "Output per month. Grows with work toward talent, decays while unemployed. Only the employer observes it",
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "employer": {
+              "anyOf": [
+                {
+                  "description": "Id of the employing firm; 0 when unemployed",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "expectedWage": {
+              "anyOf": [
+                {
+                  "description": "What the person believes it can earn: the wage of its job, or for the unemployed the last wage revised toward the offers received",
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "experience": {
+              "anyOf": [
+                {
+                  "description": "Months worked in total (shown on the CV)",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "lastWage": {
+              "anyOf": [
+                {
+                  "description": "Wage of the last job",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "level": {
+              "anyOf": [
+                {
+                  "description": "Title given by employers; never goes down",
+                  "enum": [
+                    "junior",
+                    "pleno",
+                    "senior"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "monthsShort": {
+              "anyOf": [
+                {
+                  "description": "Months in a row unable to pay the cost of living",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "monthsUnemployed": {
+              "anyOf": [
+                {
+                  "description": "Months in a row without a job",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "reservation": {
+              "anyOf": [
+                {
+                  "description": "Lowest wage accepted this month",
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "savings": {
+              "anyOf": [
+                {
+                  "description": "Money saved",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "talent": {
+              "anyOf": [
+                {
+                  "description": "Capacity a lifetime of work approaches",
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "wage": {
+              "anyOf": [
+                {
+                  "description": "Monthly wage; 0 when unemployed",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "count": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "const": "worker"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    }
+  ],
+  "title": "labor-market agent file"
+}
