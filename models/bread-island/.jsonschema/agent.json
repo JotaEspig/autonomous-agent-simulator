@@ -52,7 +52,7 @@
   "oneOf": [
     {
       "additionalProperties": false,
-      "description": "A person. A consumer while owning no land, a producer while owning at least one plot.",
+      "description": "A person. A consumer while owning no land, a producer while owning at least one plot. Everyone tries to eat a full ration every day and saves or invests what is left.",
       "properties": {
         "$schema": {
           "type": "string"
@@ -60,6 +60,18 @@
         "attributes": {
           "additionalProperties": false,
           "properties": {
+            "age": {
+              "anyOf": [
+                {
+                  "description": "Age in days",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
             "ambition": {
               "anyOf": [
                 {
@@ -76,7 +88,7 @@
             "askPrice": {
               "anyOf": [
                 {
-                  "description": "Price the producer asks per bread",
+                  "description": "Price the producer posts per bread",
                   "type": "number"
                 },
                 {
@@ -96,6 +108,17 @@
                 }
               ]
             },
+            "bidLimit": {
+              "anyOf": [
+                {
+                  "description": "Most this person pays for a bread; rises after hungry days, eases after full ones",
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
             "daysWithoutFood": {
               "anyOf": [
                 {
@@ -108,13 +131,11 @@
                 }
               ]
             },
-            "frugality": {
+            "dead": {
               "anyOf": [
                 {
-                  "description": "How much the person prefers saving to eating well: frugal people wait longer before buying and pay less for bread beyond what keeps them alive",
-                  "maximum": 1,
-                  "minimum": 0,
-                  "type": "number"
+                  "description": "Died today; the funerals rule removes the person and passes the plots on",
+                  "type": "boolean"
                 },
                 {
                   "$ref": "#/$defs/distribution"
@@ -124,7 +145,7 @@
             "hunger": {
               "anyOf": [
                 {
-                  "description": "0 after a day with a full ration; otherwise grows by hungerPerDay and falls by 1 per bread eaten",
+                  "description": "0 after a full ration; unchanged when one bread short, +1 when two short, +hungerPerDay when three or more short. Above maxHunger the person dies",
                   "minimum": 0,
                   "type": "integer"
                 },
@@ -148,6 +169,18 @@
               "anyOf": [
                 {
                   "description": "Plots owned; 0 means consumer",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "offered": {
+              "anyOf": [
+                {
+                  "description": "Bread put on sale today, after the producer ate its own share",
                   "minimum": 0,
                   "type": "integer"
                 },
@@ -183,7 +216,7 @@
             "stock": {
               "anyOf": [
                 {
-                  "description": "Bread produced today and not yet sold",
+                  "description": "Bread baked today and not yet sold",
                   "minimum": 0,
                   "type": "integer"
                 },
@@ -213,6 +246,27 @@
         },
         "description": {
           "type": "string"
+        },
+        "links": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "relation": {
+                "enum": [
+                  "parent"
+                ]
+              },
+              "to": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "relation",
+              "to"
+            ],
+            "type": "object"
+          },
+          "type": "array"
         },
         "name": {
           "type": "string"

@@ -1,56 +1,35 @@
--- Routine market behavior, not a choice: everyone tries to eat and producers try to
--- sell bread before it expires. Each agent writes only its own keys of the order maps.
+-- Everyone tries to eat a full ration every day; savings and investment come after.
+-- Producers have already eaten from their own bread and only buy what is missing.
 --
--- Each person wants to save as much as possible once fed, and how much counts as "fed"
--- depends on frugality:
---   * Survival bread: after enough days without food, the first bread of the day is a
---     must. Frugal people wait longer (up to two days before starvation); the least
---     frugal eat every day.
---   * Comfort bread: any other bread is bought only up to a price limit per bread of
---     salary x (1 - frugality) / ration. Fully frugal people never buy it.
---
--- Willingness to pay is the island's base price plus a premium per point of hunger;
--- each further bread is worth marginalDiscount less. Each bid has two prices:
---   * the offer, what the buyer tries to pay: buyers pay what they bid, so they offer no
---     more than the cheapest posted price, marked up (by outbid) as far as bread was
---     scarce yesterday;
---   * the maximum, what the buyer accepts if the cheaper bread is gone.
--- Both are limited by the savings not yet committed, so the first bread is secured
--- before the next ones. Nobody wants more than today's ration.
+-- A person reads the posted offers from the cheapest up and plans the day's shopping:
+-- as many breads as the ration needs, from offers priced within its own price limit,
+-- as long as the savings cover the posted prices. It then places one buy order per
+-- planned bread at its limit, the most it would pay. The limit is learned from
+-- experience (see metabolism.lua): it rises after hungry days and eases after full ones.
 
 function run(self, world)
   local ctx = world.ctx
-  local effects = {}
-  local id = self.id
-
-  local willingness = ctx.basePrice + ctx.hungerPremium * self.hunger
-  local cap = math.huge
-  if ctx.lowestAsk > 0 then
-    cap = ctx.lowestAsk * (1 + ctx.outbid * ctx.scarcity)
+  local offers = {}
+  for _, key in ipairs(world:keys("breadAskPrice")) do
+    offers[#offers + 1] = { price = ctx.breadAskPrice[key], qty = ctx.breadAskQty[key] }
   end
-  local waitDays = math.floor(self.frugality * (ctx.starvationDays - 2))
-  local mustEat = self.daysWithoutFood >= waitDays
-  local comfortLimit = ctx.salary * (1 - self.frugality) / ctx.ration
+  table.sort(offers, function(a, b) return a.price < b.price end)
 
-  local budget = self.wealth
-  for unit = 1, ctx.ration do
-    local max = math.min(willingness * (1 - ctx.marginalDiscount * (unit - 1)), budget)
-    if not (unit == 1 and mustEat) then
-      max = math.min(max, comfortLimit)
-    end
-    local offer = math.min(max, cap)
-    if offer < ctx.minPrice then
+  local wanted, budget, planned = ctx.ration - self.ateToday, self.wealth, 0
+  for _, offer in ipairs(offers) do
+    if wanted == 0 or offer.price > self.bidLimit then
       break
     end
-    local key = id .. "." .. unit
-    effects[#effects + 1] = fx.set("ctx.breadBids." .. key, offer)
-    effects[#effects + 1] = fx.set("ctx.breadBidMax." .. key, max)
-    budget = budget - max
+    local n = math.min(offer.qty, wanted, math.floor(budget / offer.price))
+    if n == 0 then
+      break
+    end
+    planned, wanted, budget = planned + n, wanted - n, budget - n * offer.price
   end
 
-  if self.stock > 0 then
-    effects[#effects + 1] = fx.set("ctx.breadAskQty." .. id, self.stock)
-    effects[#effects + 1] = fx.set("ctx.breadAskPrice." .. id, self.askPrice)
+  local effects = {}
+  for unit = 1, planned do
+    effects[#effects + 1] = fx.set("ctx.breadBids." .. self.id .. "." .. unit, self.bidLimit)
   end
   return effects
 end

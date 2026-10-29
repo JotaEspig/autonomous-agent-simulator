@@ -63,5 +63,5 @@ end
 |----------------------------|----------------------------------------------------------------------------|
 | `models/prisoners-dilemma` | Simultaneous moves through the context, memory, personality, matchmaking   |
 | `models/entrepreneurship`  | Costly decisions with uncertain outcomes, spawning firms, ownership, a central bank, inequality |
-| `models/bread-island`      | Supply and demand: bread and land auctions, scarce land, hunger, frugality, births, droughts and epidemics |
+| `models/bread-island`      | Supply and demand: posted prices and an order book, scarce land, hunger, ageing, inheritance, droughts and epidemics |
 | `models/benchmark`         | One million agents, for measuring throughput                               |

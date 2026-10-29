@@ -8,6 +8,7 @@ function run(self, world)
     fx.set("self.income", ctx.salary),
     fx.set("self.spent", 0),
     fx.set("self.ateToday", 0),
+    fx.set("self.offered", 0),
     fx.set("self.stock", math.floor(self.lands * ctx.breadsPerLand * ctx.productionFactor)),
   }
 end
