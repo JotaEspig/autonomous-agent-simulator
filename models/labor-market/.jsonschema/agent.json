@@ -106,6 +106,18 @@
                 }
               ]
             },
+            "horizon": {
+              "anyOf": [
+                {
+                  "description": "Months ahead the firm weighs when choosing whom to hire: long horizons invest in people who will grow. It changes with experience: juniors promoted at the firm lengthen it, juniors who leave early shorten it",
+                  "minimum": 1,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
             "layoffsPlanned": {
               "anyOf": [
                 {
@@ -154,6 +166,19 @@
                 }
               ]
             },
+            "patience": {
+              "anyOf": [
+                {
+                  "description": "How far below their wage a person's value may fall before the firm considers a layoff. Each firm has its own",
+                  "maximum": 0.9,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
             "revenue": {
               "anyOf": [
                 {
@@ -176,10 +201,22 @@
                 }
               ]
             },
+            "tolerance": {
+              "anyOf": [
+                {
+                  "description": "Patience left this month: the firm's patience, shrinking with losses",
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
             "underwater": {
               "anyOf": [
                 {
-                  "description": "Staff whose value to the firm is more than layoffTolerance below their wage",
+                  "description": "Staff whose value to the firm is more than tolerance below their wage",
                   "minimum": 0,
                   "type": "integer"
                 },
@@ -210,6 +247,27 @@
         "description": {
           "type": "string"
         },
+        "links": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "relation": {
+                "enum": [
+                  "owns"
+                ]
+              },
+              "to": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "relation",
+              "to"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
         "name": {
           "type": "string"
         },
@@ -235,7 +293,7 @@
             "age": {
               "anyOf": [
                 {
-                  "description": "Age in months",
+                  "description": "Age in months (on the CV)",
                   "minimum": 0,
                   "type": "integer"
                 },
@@ -260,6 +318,19 @@
               "anyOf": [
                 {
                   "description": "Output per month. Grows with work toward talent, decays while unemployed. Only the employer observes it",
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "courage": {
+              "anyOf": [
+                {
+                  "description": "Willingness to put savings at risk: drives founding and buying firms",
+                  "maximum": 1,
                   "minimum": 0,
                   "type": "number"
                 },
@@ -296,6 +367,65 @@
               "anyOf": [
                 {
                   "description": "Months worked in total (shown on the CV)",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "hiredAt": {
+              "anyOf": [
+                {
+                  "description": "Tick at which the person joined its current firm",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "hiredJunior": {
+              "anyOf": [
+                {
+                  "description": "Joined its current firm as a junior: the firm's investment",
+                  "type": "boolean"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "income": {
+              "anyOf": [
+                {
+                  "description": "Draw (pro-labore) and dividends received this month (owners)",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "incomeAvg": {
+              "anyOf": [
+                {
+                  "description": "Draw and dividends per month, smoothed over about a year: an owner's income for the census",
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "investmentLost": {
+              "anyOf": [
+                {
+                  "description": "Firm the person left (poached, quit or laid off) within investmentPayback months of joining it as a junior: an investment that did not pay off, for the firm to learn from; 0 when none",
                   "minimum": 0,
                   "type": "integer"
                 },
@@ -356,10 +486,46 @@
                 }
               ]
             },
+            "owner": {
+              "anyOf": [
+                {
+                  "description": "Owns a firm: lives on its draw and dividends, does not work, and does not retire",
+                  "type": "boolean"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "paidOff": {
+              "anyOf": [
+                {
+                  "description": "Firm whose junior investment just paid off (the person was promoted there), for the firm to learn from; 0 when none",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
             "reservation": {
               "anyOf": [
                 {
                   "description": "Lowest wage accepted this month",
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
+            "satisfaction": {
+              "anyOf": [
+                {
+                  "description": "Job satisfaction (0 to 1): how valued the person feels at work, from its pay against its peers', raises and promotions. Low satisfaction makes it look for another job, and at worst quit",
+                  "maximum": 1,
                   "minimum": 0,
                   "type": "number"
                 },
@@ -392,6 +558,19 @@
                 }
               ]
             },
+            "timePreference": {
+              "anyOf": [
+                {
+                  "description": "Time preference (0 to 1): how much the person values the present over the future (Mises). Present-minded people save less, spend their savings faster and settle for a job sooner. It changes with experience: hardship lowers it, long comfort raises it. Hunger raises it for the moment (see search.lua)",
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/distribution"
+                }
+              ]
+            },
             "wage": {
               "anyOf": [
                 {
@@ -413,6 +592,27 @@
         },
         "description": {
           "type": "string"
+        },
+        "links": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "relation": {
+                "enum": [
+                  "owns"
+                ]
+              },
+              "to": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "relation",
+              "to"
+            ],
+            "type": "object"
+          },
+          "type": "array"
         },
         "name": {
           "type": "string"

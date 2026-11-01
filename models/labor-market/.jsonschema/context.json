@@ -25,8 +25,20 @@
       "description": "Mean capacity of the unemployed",
       "type": "number"
     },
+    "careerCeiling": {
+      "description": "Capacity firms expect an average career to approach, from their experience with their staff",
+      "type": "number"
+    },
     "cashBufferMonths": {
       "description": "Months of payroll and overhead a firm wants in cash before it hires",
+      "type": "number"
+    },
+    "closures": {
+      "description": "Firms closed this month because their owner died and nobody could buy them",
+      "type": "integer"
+    },
+    "comfortRunway": {
+      "description": "Months of living costs saved beyond which a person at work feels its savings are more than it needs",
       "type": "number"
     },
     "counterMargin": {
@@ -37,8 +49,12 @@
       "description": "Outside offers matched by the current employer this month",
       "type": "integer"
     },
+    "crisisMargin": {
+      "description": "Losses, as a share of revenue, at which a firm has no patience left with staff who cost more than they are worth; patience shrinks in proportion to losses below this",
+      "type": "number"
+    },
     "deaths": {
-      "description": "People who died this month for lack of income",
+      "description": "People who died this month for lack of income: of hunger or after months in the squeeze",
       "type": "integer"
     },
     "description": {
@@ -49,7 +65,7 @@
       "type": "number"
     },
     "entrantSavingsMonths": {
-      "description": "Entrants bring from their family up to this many months of living costs (drawn uniformly from 0)",
+      "description": "Months of living costs entrants bring on average (help from parents, student grants); each draws between half and one and a half times this",
       "type": "number"
     },
     "entrantsPerMonth": {
@@ -60,17 +76,21 @@
       "description": "Age at which people enter the labor market, in months (18 years)",
       "type": "integer"
     },
-    "entrySensitivity": {
-      "description": "Monthly chance that a new firm enters, per unit of the sector's profit margin",
-      "type": "number"
-    },
     "expectedTenure": {
       "description": "Months a firm expects a new hire to stay, used to weigh what a hire earns against what it costs",
       "type": "number"
     },
     "fixedCost": {
-      "description": "Monthly overhead of a firm (rent, systems), paid to suppliers outside the model",
+      "description": "Monthly overhead every firm pays whatever its size, to suppliers outside the model",
       "type": "integer"
+    },
+    "foundRate": {
+      "description": "Monthly weight of founding a firm for an average eligible person in a sector with no profit (about 0.3% a month)",
+      "type": "number"
+    },
+    "foundingShare": {
+      "description": "Share of its savings a founder puts into the new firm; the rest it keeps to live on",
+      "type": "number"
     },
     "hhi": {
       "description": "Herfindahl-Hirschman index of output shares (0 to 1)",
@@ -88,6 +108,18 @@
       "description": "Cost of a hire (recruiting, onboarding), in months of the wage offered",
       "type": "number"
     },
+    "horizon": {
+      "description": "Mean hiring horizon of the firms, in months",
+      "type": "number"
+    },
+    "horizonLearn": {
+      "description": "Relative change of a firm's hiring horizon after one of its junior hires pays off (promoted at the firm) or fails (leaves within investmentPayback months)",
+      "type": "number"
+    },
+    "hungerDeaths": {
+      "description": "People who died of hunger this month (not even survivalCost for food)",
+      "type": "integer"
+    },
     "initialEmployment": {
       "description": "Share of people employed at the start",
       "type": "number"
@@ -100,13 +132,13 @@
       "description": "Job seekers a firm interviews per opening",
       "type": "integer"
     },
+    "investmentPayback": {
+      "description": "Months a junior hire must stay for the firm to see its investment paid back",
+      "type": "integer"
+    },
     "jobChanges": {
       "description": "Employed people who moved to another firm this month",
       "type": "integer"
-    },
-    "layoffTolerance": {
-      "description": "How far below their wage a person's value may fall before the firm considers a layoff (labor hoarding)",
-      "type": "number"
     },
     "layoffs": {
       "description": "People laid off this month, including by bankruptcy",
@@ -125,7 +157,7 @@
       "type": "object"
     },
     "lowerClass": {
-      "description": "Share earning 1 to 3 minimum wages",
+      "description": "Share with an income of 1 to 3 minimum wages",
       "type": "number"
     },
     "markdownCut": {
@@ -136,8 +168,8 @@
       "description": "How much a firm lowers its offers (raises the markdown) after a month in which it filled all its openings",
       "type": "number"
     },
-    "maxEntryChance": {
-      "description": "Highest monthly chance that a new firm enters",
+    "maxHorizon": {
+      "description": "Longest hiring horizon a firm can come to",
       "type": "number"
     },
     "meanWage": {
@@ -145,23 +177,31 @@
       "type": "number"
     },
     "middleClass": {
-      "description": "Share earning 3 to 10 minimum wages",
+      "description": "Share with an income of 3 to 10 minimum wages",
       "type": "number"
     },
     "minCapacity": {
       "description": "Capacity never falls below this",
       "type": "number"
     },
+    "minFoundingCapital": {
+      "description": "Least capital a new firm needs (about two years of an average wage)",
+      "type": "integer"
+    },
     "minHires": {
       "description": "Openings a firm can recruit for in a month, however small it is",
       "type": "integer"
+    },
+    "minHorizon": {
+      "description": "Shortest hiring horizon a firm can come to",
+      "type": "number"
     },
     "minimumWage": {
       "description": "Reference minimum wage per month. Used only to classify income; it does not bind any wage",
       "type": "integer"
     },
     "monthsShortToDie": {
-      "description": "Consecutive months unable to pay the cost of living that kill a person",
+      "description": "Consecutive months unable to pay the full cost of living (in the squeeze, eating but cutting everything else) that kill a person",
       "type": "integer"
     },
     "mortalityBase": {
@@ -196,6 +236,18 @@
       "description": "Units produced by the sector this month",
       "type": "number"
     },
+    "overheadShare": {
+      "description": "Overhead that grows with the firm (rent, systems, management), as a share of its wage bill",
+      "type": "number"
+    },
+    "ownerIncome": {
+      "description": "Mean monthly income of owners (draw and dividends, smoothed over a year)",
+      "type": "number"
+    },
+    "owners": {
+      "description": "Share of the population that owns a firm",
+      "type": "number"
+    },
     "payoutAboveMonths": {
       "description": "Profit is paid out to the owners as dividends as long as this many months of costs stay in the bank",
       "type": "number"
@@ -205,15 +257,47 @@
       "type": "number"
     },
     "poverty": {
-      "description": "Share of the labor force earning less than 1 minimum wage (unemployed included)",
+      "description": "Share of the population with an income under 1 minimum wage (unemployed included)",
       "type": "number"
     },
     "price": {
       "description": "Price of a unit of output this month",
       "type": "number"
     },
+    "priceAdapt": {
+      "description": "Share of the latest monthly price change that firms add to their expectation of the price trend",
+      "type": "number"
+    },
+    "priceTrend": {
+      "description": "Expected monthly change of the price, from recent changes; firms value hires at the price they expect next month",
+      "type": "number"
+    },
     "profitMargin": {
       "description": "Profit of the sector over its revenue last month",
+      "type": "number"
+    },
+    "promotionBoost": {
+      "description": "Rise in job satisfaction after a promotion",
+      "type": "number"
+    },
+    "quitRate": {
+      "description": "Weight of quitting for the most dissatisfied (satisfaction 0); falls to 0 at quitSatisfaction",
+      "type": "number"
+    },
+    "quitRunway": {
+      "description": "Months of living costs a person wants saved before quitting without another job",
+      "type": "number"
+    },
+    "quitSatisfaction": {
+      "description": "Job satisfaction below which a person may quit without another job",
+      "type": "number"
+    },
+    "quits": {
+      "description": "People who quit their job this month without another one",
+      "type": "integer"
+    },
+    "raiseBoost": {
+      "description": "Rise in job satisfaction after the employer matches an outside offer",
       "type": "number"
     },
     "reservationDecay": {
@@ -232,8 +316,28 @@
       "description": "Months of savings above which an unemployed person is not pressed to lower the wage it asks",
       "type": "number"
     },
+    "saleProfitMonths": {
+      "description": "Months of profit a firm is worth, on top of its cash, when it is sold after its owner dies",
+      "type": "number"
+    },
+    "satisfaction": {
+      "description": "Mean job satisfaction of the employed",
+      "type": "number"
+    },
+    "satisfactionAdapt": {
+      "description": "Share of the distance to how valued it feels this month that a person's job satisfaction moves each month",
+      "type": "number"
+    },
+    "satisfactionHire": {
+      "description": "Job satisfaction at the start of a new job (the honeymoon)",
+      "type": "number"
+    },
     "searchBase": {
-      "description": "Monthly chance that an employed person looks for another job while paid like its peers",
+      "description": "Monthly weight of looking for another job for an employed person paid like its peers",
+      "type": "number"
+    },
+    "searchDissatisfaction": {
+      "description": "Extra weight of looking for another job per unit of job satisfaction below 0.5",
       "type": "number"
     },
     "searchGap": {
@@ -256,28 +360,56 @@
       "description": "Share of the labor force at the senior level",
       "type": "number"
     },
+    "shrinkInterviews": {
+      "description": "Recruiters distrust extreme interview reads and pull them toward the average of the candidates, in proportion to how unreliable interviews are",
+      "type": "boolean"
+    },
     "skillDecay": {
       "description": "Monthly share of capacity lost while unemployed",
       "type": "number"
     },
-    "startingCapital": {
-      "description": "Cash a new firm starts with, put in by owners outside the model",
+    "squeezed": {
+      "description": "Share of the labor force in the squeeze: unable to pay the full cost of living this month",
+      "type": "number"
+    },
+    "startupMonths": {
+      "description": "Months a new firm may hire before it has to be profitable to keep hiring",
       "type": "integer"
     },
     "subsistence": {
       "description": "Cost of living per month: basic food and housing",
       "type": "integer"
     },
+    "survivalCost": {
+      "description": "Least money a month for food. An unemployed person who starts a month without it, after a first month of grace, dies of hunger",
+      "type": "integer"
+    },
     "switchPremium": {
       "description": "Raise an employed worker requires to move to another firm",
       "type": "number"
     },
+    "timePreference": {
+      "description": "Mean time preference of the labor force",
+      "type": "number"
+    },
+    "timePreferenceDrift": {
+      "description": "How much a month at work with savings beyond comfortRunway raises a person's time preference: savings it never needs feel less necessary",
+      "type": "number"
+    },
+    "timePreferenceLearn": {
+      "description": "How much a month of hardship (unemployed, or unable to pay the full cost of living) lowers a person's time preference: it learns that savings matter",
+      "type": "number"
+    },
+    "timePreferenceSpend": {
+      "description": "How much more of the wage above subsistence the most present-minded spend than the average person, and the least spend less",
+      "type": "number"
+    },
     "unemployment": {
-      "description": "Share of the labor force without a job",
+      "description": "Share of the people who are not owners without a job",
       "type": "number"
     },
     "upperClass": {
-      "description": "Share earning more than 10 minimum wages",
+      "description": "Share with an income above 10 minimum wages",
       "type": "number"
     },
     "wealthSpending": {

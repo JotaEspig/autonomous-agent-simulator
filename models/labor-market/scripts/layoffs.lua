@@ -2,7 +2,7 @@
 -- what they cost: lowest value (capacity x the firm's marginal revenue) over wage first,
 -- one at a time. Each layoff shrinks the firm's share of the market and so raises what the
 -- others are worth to it; the firm stops when the next person is no longer more than
--- layoffTolerance below the wage, or when it has laid off the planned number. The firm
+-- the firm's tolerance below the wage, or when it has laid off the planned number. The firm
 -- knows the real capacity of its own staff.
 
 function run(world)
@@ -11,7 +11,7 @@ function run(world)
   for _, fid in ipairs(world:ids("firm")) do
     local f = world:agent(fid)
     if f.layoffsPlanned > 0 then
-      planned[fid] = { n = f.layoffsPlanned, cap = f.capacitySum, people = {} }
+      planned[fid] = { n = f.layoffsPlanned, cap = f.capacitySum, tolerance = f.tolerance, people = {} }
       any = true
     end
   end
@@ -22,7 +22,8 @@ function run(world)
     local w = world:agent(id)
     local p = planned[w.employer]
     if p then
-      p.people[#p.people + 1] = { id = id, wage = w.wage, cap = w.capacity, ratio = w.capacity / math.max(w.wage, 1) }
+      p.people[#p.people + 1] = { id = id, wage = w.wage, cap = w.capacity, ratio = w.capacity / math.max(w.wage, 1),
+        junior = w.hiredJunior, hiredAt = w.hiredAt }
     end
   end
   local effects = {}
@@ -35,13 +36,16 @@ function run(world)
     for i = 1, math.min(p.n, #p.people) do
       local person = p.people[i]
       local value = ctx.price * (1 - cap / math.max(total, 1e-9) / ctx.elasticity) * person.cap
-      if value >= person.wage * (1 - ctx.layoffTolerance) then
+      if value >= person.wage * (1 - p.tolerance) then
         break
       end
       cap = cap - person.cap
       total = total - person.cap
       local who = "agent." .. person.id
       effects[#effects + 1] = fx.set(who .. ".employer", 0)
+      if person.junior and world.tick - person.hiredAt < ctx.investmentPayback then
+        effects[#effects + 1] = fx.set(who .. ".investmentLost", fid)
+      end
       effects[#effects + 1] = fx.set(who .. ".wage", 0)
       effects[#effects + 1] = fx.set(who .. ".lastWage", person.wage)
       effects[#effects + 1] = fx.set(who .. ".expectedWage", person.wage)

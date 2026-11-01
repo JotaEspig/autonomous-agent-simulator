@@ -28,7 +28,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `scenario-builder`, a Claude Code skill that turns a real-life situation into a model, with agent
   behavior grounded in how real actors behave, a library of behavioral formulas and a review checklist.
 - Labor market example model: firms of one sector compete for workers whose capacity grows with
-  work, through noisy interviews, individual offers, poaching and counteroffers; workers must earn
-  enough to cover the cost of living, and a minimum wage is used only to measure income classes.
+  work, through noisy interviews discounted by recruiters, individual offers, poaching and
+  counteroffers; firms differ in patience and learn how far ahead to invest in juniors; workers
+  must earn enough to eat, ration when money is short, quit jobs where they feel undervalued, and
+  have a time preference shaped by experience; a minimum wage is used only to measure income
+  classes.
 - A `README.md` for every example model, describing its agents, context, decisions, rules and metrics;
   `agentsim validate` warns when a model has no `README.md`.
