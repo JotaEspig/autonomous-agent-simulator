@@ -363,92 +363,39 @@ capacity, last wage), `bankrupt` (with the firm's patience, horizon and markdown
 
 ## Results
 
-Over 20 seeds of 40 years (means across seeds):
+The full report, with every attribute, parameter, decision and rule, the results over 20 seeds,
+the sensitivity analysis and the model's problems, is in [REPORT.md](REPORT.md). In short, over
+20 seeds of 40 years:
 
-| Year | People | Firms | Unemployment | Lower | Middle | Upper | Mean wage | Capacity (employed) | Job satisfaction | Time preference | Firms' horizon (months) | HHI |
-|------|--------|-------|--------------|-------|--------|-------|-----------|---------------------|------------------|-----------------|-------------------------|-----|
-| 0    | 2,000  | 20    | 0%           | 0%    | 0%     | 0%    | 3,206     | 1.00                | -                | 0.50            | 66                      | 0    |
-| 1    | 1,982  | 21    | 0.2%         | 81%   | 19%    | 0%    | 4,046     | 1.24                | 0.62             | 0.50            | 53                      | 0.05 |
-| 5    | 1,961  | 20    | 3.3%         | 17%   | 80%    | 0%    | 5,846     | 1.85                | 0.60             | 0.50            | 85                      | 0.06 |
-| 10   | 1,936  | 20    | 3.3%         | 15%   | 82%    | 0%    | 6,294     | 2.15                | 0.55             | 0.51            | 86                      | 0.07 |
-| 20   | 1,908  | 18    | 2.8%         | 17%   | 81%    | 0%    | 6,333     | 2.29                | 0.54             | 0.53            | 82                      | 0.08 |
-| 40   | 1,900  | 13    | 1.7%         | 19%   | 79%    | 0%    | 6,128     | 2.31                | 0.53             | 0.56            | 42                      | 0.13 |
-
-(At year 0 everyone hired by `setup` is still unclassified: the census first runs at the end of
-month 1. Poverty equals unemployment at every point: nobody employed earns under one minimum
-wage.)
-
-- **Wages rise because people learn and firms compete for them.** Capacity more than doubles in
-  ten years and wages follow, through outside offers: about 19 job changes and 5 matched
-  counteroffers a month. Nobody employed earns less than a minimum wage, even without a legal
-  floor: firms bid for workers. Wages are fairly equal (Gini 0.16) and nobody reaches the upper
-  class.
-- **Poverty is short unemployment, 2 to 3%.** Desperate job seekers take the first offer; young
-  people arrive with a year of family support; recruiters compare candidates with others of
-  their level. Unemployment is mostly people between jobs.
-- **Almost nobody dies of poverty after the start.** About 16 deaths per run, 83% of them in the
-  first year: people who start unemployed with nearly no savings (an artifact of the initial
-  conditions). After year 2, about 2.6 deaths in 38 years.
-- **Firms learn to invest in juniors, then to stop.** Hiring horizons lengthen in the first
-  years, as juniors grow and are promoted, and shorten later, as a more competitive market
-  poaches trainees or lays off the overrated (85 months at year 10, 42 at year 40). Becker's
-  general training result, emerging from firms' own experience.
-- **Long prosperity erodes thrift.** Average time preference drifts up from 0.50 to 0.56: decades
-  of steady work with savings beyond two years make savings feel less necessary. Hardship
-  pushes the other way, but it is rare.
-- **Few quit into unemployment.** About 11 per run: dissatisfied people mostly find another job
-  first, which is what quitting into unemployment requires savings to avoid.
-- **The sector concentrates.** 20 firms become 13 (bankruptcies 12, new firms 5) and
-  concentration (HHI) more than doubles. Margins are thin (about 5%), and with 20,000 a month of
-  overhead only large firms stay profitable.
-
-### Sensitivity
-
-Eight seeds each, one change at a time; levels are means of years 31 to 40, counts are totals
-over 40 years.
-
-| Scenario                                   | Unemployment | Mean wage | Gini | Time preference | Horizon | Firms | Poverty deaths | Quits | Layoffs |
-|--------------------------------------------|--------------|-----------|------|-----------------|---------|-------|----------------|-------|---------|
-| Base (20 seeds)                            | 1.8%         | 6,176     | 0.16 | 0.55            | 52      | 13.3  | 16             | 11    | 4,279   |
-| `entrantSavingsMonths` 3                   | 1.0%         | 6,205     | 0.15 | 0.61            | 39      | 15.3  | 54             | 19    | 3,452   |
-| `survivalCost` 0                           | 1.9%         | 6,157     | 0.16 | 0.56            | 61      | 12.7  | 5              | 7     | 4,214   |
-| Static time preference                     | 1.7%         | 6,176     | 0.16 | 0.50            | 52      | 12.3  | 16             | 6     | 4,102   |
-| Static horizon                             | 3.2%         | 6,324     | 0.18 | 0.52            | 75      | 12.2  | 15             | 5     | 6,044   |
-| No quitting, no dissatisfied search        | 1.8%         | 6,225     | 0.17 | 0.56            | 66      | 12.1  | 14             | 0     | 4,595   |
-| `interviewNoise` 0.1                       | 1.1%         | 6,351     | 0.16 | 0.62            | 75      | 14.9  | 15             | 4     | 1,276   |
-| `fixedCost` 10,000                         | 1.6%         | 6,331     | 0.16 | 0.57            | 69      | 16.5  | 14             | 6     | 3,508   |
-
-- **Family support decides who survives the start of working life.** With three months instead
-  of twelve, poverty deaths more than triple, and mostly among the young.
-- **Learning horizons cut unemployment.** With fixed horizons, firms with long ones keep hiring
-  juniors who are then laid off: layoffs rise by 40% and unemployment nearly doubles.
-- **Accurate interviews cut layoffs by 70%**, and leave people secure enough that time
-  preference drifts up further.
-- **Concentration depends on overhead.** Halving `fixedCost` keeps 16 or 17 firms.
-- **Satisfaction and quitting change little in aggregate.** They matter for who moves, not for
-  how many are out of work.
+- **Wages rise because people learn and firms compete for them**, and nobody employed earns less
+  than a minimum wage, even without one. Wages are fairly equal (Gini 0.21).
+- **Poverty is unemployment**, 2.6% to 4.6%, rising over the run as failing start-ups lay off
+  their staff (1.8% without entrepreneurship).
+- **Founders are the patient, the brave and the well-off employed** (courage 0.57, time
+  preference 0.25, aged 44 on average); nobody founds out of unemployment, for lack of capital.
+- **Most start-ups fail** (83% within about four years), yet the sector grows from 20 to 80
+  firms and owners from 1% to 4% of the population. Owners earn about a senior's wage on average;
+  the upper class stays near 0.3%.
+- **Poverty deaths come from the initial conditions**: 18 per run, 14 in the first year.
+- **Firms learn to invest in juniors**, then partly unlearn it as trainees are poached.
+- **The capital barrier shapes the economy**: at 50,000 thousands of small firms fail and
+  unemployment reaches 13%; at 300,000 almost nobody founds.
 
 ## Realism
 
-- **Matches stylized facts:** wages rising with experience and through job changes (about 10%
-  raises), counteroffers, reservation wages anchored on the last wage and collapsing when money
-  runs out, the poor taking worse jobs sooner, job satisfaction tied to relative pay, quits
-  rising with dissatisfaction, more saving after hardship, underinvestment in general training,
-  layoffs in waves, thin margins and a shakeout towards fewer, larger firms.
-- **Too low:** unemployment of 2 to 3% is low for any real economy. Real labor markets have
-  frictions this one lacks: geography, mismatched skills between sectors, discrimination,
-  health, firms that close for reasons other than costs, and economy-wide recessions.
-- **Too compressed at the top:** nobody reaches the upper class. Real pay at the top comes from
-  things the model leaves out: management, ownership, rare skills, bargaining power.
-- **Too harsh at the bottom:** dying of hunger a month after the money runs out, with no family,
-  neighbors, charity or informal work to fall back on.
+- **Matches stylized facts:** wages rising with experience and through job changes, counteroffers,
+  reservation wages anchored on the last wage and collapsing when money runs out, job
+  satisfaction tied to relative pay, more saving after hardship, underinvestment in general
+  training, high start-up failure, entrepreneurs who are more risk tolerant and patient.
+- **Does not match:** start-up failure is too high, there is no necessity entrepreneurship,
+  unemployment is low (no recessions), and the top is compressed. See REPORT.md, section 10.
 
 ## Limitations and next steps
 
 - **No households, mutual aid or informal sector.** Families that share income, mutual aid
   societies (common before welfare states), or informal work at low pay.
-- **No self-employment or worker entrepreneurship.** People with savings and low time preference
-  could start firms; owners would then be people, and the upper class would exist.
+- **No small-scale or necessity entrepreneurship.** Only people with 150,000 of capital found
+  firms, all in the same sector, with no niche of their own and no credit.
 - **No private contracts.** Without a labor code, firms and workers would negotiate terms:
   severance, notice, fixed-term contracts, non-compete clauses. Firms could offer them to attract
   workers; workers could demand them.
@@ -456,9 +403,10 @@ over 40 years.
   quit often, likewise.
 - **No credit or interest.** Time preference shapes saving, but there is no loan market where it
   would set an interest rate, and no capital for firms to invest.
-- **Demand is outside the model.** The workers' wages do not buy the sector's product, so there
-  is no feedback from unemployment to demand and no recessions.
+- **Demand and the cost of living are outside the model.** The workers' wages do not buy the
+  sector's product, the cost of living is fixed, and overhead leaves the economy, so there is no
+  feedback from unemployment to demand and no recessions.
 - **Wages never fall within a job.** Firms adjust only through layoffs.
 - **One sector, one kind of skill.** No education choice, no specialization, no other sectors.
-- **The start is artificial.** Everyone starts as a junior with base capacity, and some start
-  unemployed with nearly no savings.
+- **The start is artificial.** Everyone starts as a junior with base capacity, the first firms'
+  cash comes from nowhere, and some people start unemployed with nearly no savings.

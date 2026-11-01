@@ -35,7 +35,13 @@ Talk to the user in their language. Files in the repository are written in Engli
 
 ### 1. Understand the request
 
-Find out:
+If an abstraction document exists for the scenario (`docs/abstractions/<slug>.md`, written by
+`/scenario-abstraction`), it is the specification: read it first, implement its actors,
+attributes, rules and timing, and use its stylized facts as validation targets. Ask only about
+the decisions it leaves open. When the phenomenon is complex and no abstraction exists, suggest
+running `/scenario-abstraction` first.
+
+Otherwise, find out:
 - the **question** the scenario should help answer;
 - the **actors** (agent types), and which real people or organizations they stand for;
 - the **time scale** (what one tick is) and the horizon;
