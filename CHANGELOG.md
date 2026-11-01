@@ -27,6 +27,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Modeling guide and architecture documentation.
 - `scenario-builder`, a Claude Code skill that turns a real-life situation into a model, with agent
   behavior grounded in how real actors behave, a library of behavioral formulas and a review checklist.
+- `scenario-abstraction`, a Claude Code skill that decomposes a real-world phenomenon into the
+  individual behaviors that cause it (actors, attributes, decision rules as math, interactions and
+  timing) and writes an abstraction document that `scenario-builder` uses as its specification.
 - Labor market example model: firms of one sector compete for workers whose capacity grows with
   work, through noisy interviews discounted by recruiters, individual offers, poaching and
   counteroffers; firms differ in patience and learn how far ahead to invest in juniors; workers
