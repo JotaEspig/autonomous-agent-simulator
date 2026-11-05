@@ -68,4 +68,5 @@ real-world counterpart behaves, and verifies behavior before looking at results.
 | `models/prisoners-dilemma` | Simultaneous moves through the context, memory, personality, matchmaking   |
 | `models/entrepreneurship`  | Costly decisions with uncertain outcomes, spawning firms, ownership, a central bank, inequality |
 | `models/bread-island`      | Supply and demand: posted prices and an order book, scarce land, hunger, ageing, inheritance, droughts and epidemics |
+| `models/labor-market`      | Matching without a minimum wage: noisy interviews, offers in rounds, poaching and counteroffers, learning on the job, income classes |
 | `models/benchmark`         | One million agents, for measuring throughput                               |
